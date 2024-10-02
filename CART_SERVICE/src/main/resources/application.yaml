@@ -1,0 +1,12 @@
+server:
+  port: 6006
+spring:
+  application:
+    name: CART-SERVICE
+  profiles:
+    active: db,server
+  config:
+    import:
+      - "optional:configserver:http://localhost:9009"
+
+

@@ -1,0 +1,12 @@
+server:
+  port: 3003
+spring:
+  application:
+    name: CATEGORY-SERVICE
+  profiles:
+    active: db,server
+  config:
+    import:
+      - "optional:configserver:http://localhost:9009"
+
+

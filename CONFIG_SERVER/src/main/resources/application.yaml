@@ -1,0 +1,14 @@
+server:
+  port: 9009
+
+spring:
+  application:
+    name: CONFIG-SERVER
+  config:
+    import: "optional:classpath:config/eureka-registry.yaml"
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Akhil351/configuration/
+

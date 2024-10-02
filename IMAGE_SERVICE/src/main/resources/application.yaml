@@ -1,0 +1,16 @@
+server:
+  port: 5005
+spring:
+  application:
+    name: IMAGE-SERVICE
+  profiles:
+    active: db,server
+  config:
+    import:
+      - "optional:configserver:http://localhost:9009"
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+
