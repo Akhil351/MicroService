@@ -3,12 +3,10 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/API_GATEWAY/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/CART_ITEM_SERVICE/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/CART_SERVICE/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/CATEGORY_SERVICE/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/COMMON_SERVICE/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/CONFIG_SERVER/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/IMAGE_SERVICE/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/PRODUCT_SERVICE/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/SERVICE_REGISTRY/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/CONFIG-SERVER/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/EcommerceService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ProductCatalogService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SERVICE-REGISTRY/src/main/java" charset="UTF-8" />
   </component>
 </project>
