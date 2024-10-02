@@ -9,15 +9,17 @@
         <outputRelativeToContentRoot value="true" />
         <module name="API_GATEWAY" />
         <module name="PRODUCT_SERVICE" />
-        <module name="SERVICE_REGISTRY" />
-        <module name="COMMON_SERVICE" />
-        <module name="CATEGORY_SERVICE" />
-        <module name="CART_ITEM_SERVICE" />
         <module name="CONFIG_SERVER" />
-        <module name="IMAGE_SERVICE" />
+        <module name="COMMON_SERVICE" />
+        <module name="SERVICE_REGISTRY" />
         <module name="CART_SERVICE" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="CART_ITEM_SERVICE" target="21" />
+      <module name="CATEGORY_SERVICE" target="21" />
+      <module name="IMAGE_SERVICE" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
