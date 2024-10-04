@@ -7,9 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan( basePackages = {"org.Akhil.PRODUCT_SERVICE","org.Akhil.COMMON_SERVICE"})
-@EntityScan({"org.Akhil.COMMON_SERVICE.model"})
-@EnableJpaRepositories({"org.Akhil.COMMON_SERVICE.repo"})
+@ComponentScan( basePackages = {"org.Akhil.product","org.Akhil.common"})
+@EntityScan({"org.Akhil.common.model"})
+@EnableJpaRepositories({"org.Akhil.common.repo"})
 public class ProductServiceApplication {
 
 	public static void main(String[] args) {
