@@ -25,9 +25,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @Override
     public void clearCart(Long id) {
-        Cart cart=this.getCart(id);
         cartItemRepo.deleteAllByCartId(id);
-        cart.getCartItemIds().clear();
         cartRepo.deleteById(id);
     }
 

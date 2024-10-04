@@ -1,13 +1,16 @@
 package org.Akhil.common.model;
 
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +22,4 @@ public class Cart {
     private Long id;
     @Builder.Default
     private BigDecimal totalAmount=BigDecimal.ZERO;
-    @ElementCollection
-    @CollectionTable(name="items",joinColumns = @JoinColumn(name="cart_id"))
-    private Set<Long> cartItemIds;
 }

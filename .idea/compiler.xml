@@ -7,17 +7,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="API_GATEWAY" />
+        <module name="COMMON-SERVICE" />
         <module name="PRODUCT_SERVICE" />
+        <module name="GATEWAY-SERVICE" />
         <module name="CONFIG_SERVER" />
         <module name="SERVICE_REGISTRY" />
-        <module name="COMMON_SERVICE" />
         <module name="CART_SERVICE" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="API_GATEWAY" target="21" />
       <module name="CART_ITEM_SERVICE" target="21" />
       <module name="CATEGORY_SERVICE" target="21" />
+      <module name="COMMON_SERVICE" target="21" />
       <module name="IMAGE_SERVICE" target="21" />
     </bytecodeTargetLevel>
   </component>
@@ -27,8 +29,10 @@
       <module name="CART_ITEM_SERVICE" options="-parameters" />
       <module name="CART_SERVICE" options="-parameters" />
       <module name="CATEGORY_SERVICE" options="-parameters" />
+      <module name="COMMON-SERVICE" options="-parameters" />
       <module name="COMMON_SERVICE" options="-parameters" />
       <module name="CONFIG_SERVER" options="-parameters" />
+      <module name="GATEWAY-SERVICE" options="-parameters" />
       <module name="IMAGE_SERVICE" options="-parameters" />
       <module name="PRODUCT_SERVICE" options="-parameters" />
       <module name="SERVICE_REGISTRY" options="-parameters" />

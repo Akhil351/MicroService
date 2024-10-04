@@ -44,7 +44,6 @@ public class CartItemServiceImpl implements CartItemService {
         }
         cartItem.setTotalPrice();
         cartItemRepo.save(cartItem);
-        cart.getCartItemIds().add(cartItem.getId());
         cart.setTotalAmount(this.updateTotalAmountInCart(cart));
         cartRepo.save(cart);
     }
@@ -55,7 +54,6 @@ public class CartItemServiceImpl implements CartItemService {
            CartItem cartItemToRemove=this.getCartItem(cartId,productId);
            cartItemToRemove.setCartId(null);
            cartItemRepo.delete(cartItemToRemove);
-           cart.getCartItemIds().remove(cartItemToRemove.getId());
            cart.setTotalAmount(this.updateTotalAmountInCart(cart));
            cartRepo.save(cart);
     }
@@ -77,7 +75,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     private BigDecimal updateTotalAmountInCart(Cart cart){
-         return  cartItemRepo.findByIdIn(cart.getCartItemIds()).stream()
+         return  cartItemRepo.findByCartId(cart.getId()).stream()
                 .map(item->{
                     return item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
                 }).reduce(BigDecimal.ZERO,BigDecimal::add);
