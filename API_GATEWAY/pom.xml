@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.Akhil</groupId>
-	<artifactId>API_GATEWAY</artifactId>
-	<version>develop-akhil-1.0</version>
-	<name>API_GATEWAY</name>
+	<artifactId>GATEWAY-SERVICE</artifactId>
+	<version>akhil-1.0</version>
+	<name>GATEWAY-SERVICE</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

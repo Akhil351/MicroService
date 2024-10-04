@@ -10,8 +10,8 @@
         <module name="API_GATEWAY" />
         <module name="PRODUCT_SERVICE" />
         <module name="CONFIG_SERVER" />
-        <module name="COMMON_SERVICE" />
         <module name="SERVICE_REGISTRY" />
+        <module name="COMMON_SERVICE" />
         <module name="CART_SERVICE" />
       </profile>
     </annotationProcessing>
