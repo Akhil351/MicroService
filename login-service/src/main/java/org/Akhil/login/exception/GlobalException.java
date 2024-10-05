@@ -1,20 +1,20 @@
-package org.Akhil.cart.exception;
+package org.Akhil.login.exception;
 
-import feign.FeignException;
+
+import org.Akhil.common.exception.AlreadyExistException;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class GlobalException {
-    @ExceptionHandler(FeignException.class)
-    public ResponseEntity<ApiResponse> feignClient(FeignException exception){
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+    @ExceptionHandler(AlreadyExistException.class)
+    public ResponseEntity<ApiResponse> emailAlreadyExist(AlreadyExistException exception){
+        return ResponseEntity.status(CONFLICT).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
     }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFound(ResourceNotFoundException exception){

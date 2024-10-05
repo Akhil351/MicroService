@@ -40,4 +40,9 @@ public class CartServiceImpl implements CartService {
         Cart cart=new Cart();
         return cartRepo.save(cart).getId();
     }
+
+    @Override
+    public Cart getCartByUserId(String userId) {
+        return cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
+    }
 }

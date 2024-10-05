@@ -1,7 +1,7 @@
 package org.Akhil.product.exception;
 
 import feign.FeignException;
-import org.Akhil.common.dto.ApiResponse;
+import org.Akhil.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

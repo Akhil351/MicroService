@@ -2,7 +2,7 @@ package org.Akhil.cart.controller;
 
 import org.Akhil.cart.service.CartItemService;
 import org.Akhil.cart.service.CartService;
-import org.Akhil.common.dto.ApiResponse;
+import org.Akhil.common.response.ApiResponse;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

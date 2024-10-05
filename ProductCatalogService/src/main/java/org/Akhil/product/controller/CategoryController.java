@@ -1,7 +1,7 @@
 package org.Akhil.product.controller;
 
 
-import org.Akhil.common.dto.ApiResponse;
+import org.Akhil.common.response.ApiResponse;
 import org.Akhil.common.exception.AlreadyExistException;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.model.Category;

@@ -7,11 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="COMMON-SERVICE" />
+        <module name="login-service" />
         <module name="PRODUCT_SERVICE" />
+        <module name="SERVICE_REGISTRY" />
+        <module name="COMMON-SERVICE" />
         <module name="GATEWAY-SERVICE" />
         <module name="CONFIG_SERVER" />
-        <module name="SERVICE_REGISTRY" />
         <module name="CART_SERVICE" />
       </profile>
     </annotationProcessing>
@@ -36,6 +37,7 @@
       <module name="IMAGE_SERVICE" options="-parameters" />
       <module name="PRODUCT_SERVICE" options="-parameters" />
       <module name="SERVICE_REGISTRY" options="-parameters" />
+      <module name="login-service" options="-parameters" />
     </option>
   </component>
 </project>

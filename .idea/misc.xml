@@ -18,6 +18,7 @@
         <option value="$PROJECT_DIR$/CONFIG-SERVER/pom.xml" />
         <option value="$PROJECT_DIR$/API-GATEWAY/pom.xml" />
         <option value="$PROJECT_DIR$/CommonService/pom.xml" />
+        <option value="$PROJECT_DIR$/login-service/pom.xml" />
       </list>
     </option>
   </component>

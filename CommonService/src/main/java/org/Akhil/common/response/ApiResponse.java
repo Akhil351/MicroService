@@ -1,4 +1,4 @@
-package org.Akhil.common.dto;
+package org.Akhil.common.response;
 
 import lombok.Builder;
 import lombok.Data;
