@@ -3,13 +3,13 @@ package org.Akhil.product.service.impl;
 import org.Akhil.common.dto.ImageDto;
 import org.Akhil.common.dto.ProductDto;
 import org.Akhil.common.exception.ResourceNotFoundException;
+import org.Akhil.common.mapper.Converter;
 import org.Akhil.common.model.Category;
 import org.Akhil.common.model.Product;
 import org.Akhil.common.repo.CategoryRepo;
 import org.Akhil.common.repo.ImageRepo;
 import org.Akhil.common.repo.ProductRepo;
 import org.Akhil.product.service.ProductService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ImageRepo imageRepo;
     @Autowired
-    private ModelMapper modelMapper;
+    private Converter converter;
     @Override
     public Product addProduct(ProductDto productDto) {
         Category category=this.getCategory(productDto.getCategory());
@@ -119,13 +119,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto convertToDto(Product product) {
-        ProductDto productDto=modelMapper.map(product,ProductDto.class);
+        ProductDto productDto= converter.convertToDto(product,ProductDto.class);
         Optional<Category> category=categoryRepo.findById(product.getCategoryId());
         if(category.isEmpty()){
             throw new ResourceNotFoundException("Category Not Found");
         }
         productDto.setCategory(category.get().getName());
-        productDto.setImages(imageRepo.findByProductId(product.getId()).stream().map(image->modelMapper.map(image,ImageDto.class)).toList());
+        productDto.setImages(imageRepo.findByProductId(product.getId()).stream().map(image->converter.convertToDto(image,ImageDto.class)).toList());
         return productDto;
     }
 

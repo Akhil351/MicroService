@@ -8,6 +8,7 @@ import org.Akhil.common.dto.OrderDto;
 import org.Akhil.common.dto.OrderItemDto;
 import org.Akhil.common.enums.OrderStatus;
 import org.Akhil.common.exception.ResourceNotFoundException;
+import org.Akhil.common.mapper.Converter;
 import org.Akhil.common.model.Cart;
 import org.Akhil.common.model.Order;
 import org.Akhil.common.model.OrderItem;
@@ -16,7 +17,6 @@ import org.Akhil.common.repo.CartItemRepo;
 import org.Akhil.common.repo.OrderItemRepo;
 import org.Akhil.common.repo.OrderRepo;
 import org.Akhil.common.repo.ProductRepo;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepo orderRepo;
     @Autowired
-    private ModelMapper modelMapper;
+    private Converter converter;
     @Autowired
     private OrderItemRepo orderItemRepo;
     @Autowired
@@ -93,13 +93,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderDto convertToDto(Order order){
-        OrderDto orderDto= modelMapper.map(order,OrderDto.class);
+        OrderDto orderDto= converter.convertToDto(order,OrderDto.class);
         orderDto.setStatus(order.getOrderStatus().getStatus());
         orderDto.setOrderItems(orderItemRepo.findByOrderId(orderDto.getOrderId()).stream().map(this::convertToOrderDto).toList());
         return orderDto;
     }
     private OrderItemDto convertToOrderDto(OrderItem orderItem){
-        OrderItemDto orderItemDto=modelMapper.map(orderItem,OrderItemDto.class);
+        OrderItemDto orderItemDto=converter.convertToDto(orderItem,OrderItemDto.class);
         Product product=productClient.getProductById(orderItem.getProductId());
         orderItemDto.setProductName(product.getName());
         return orderItemDto;
