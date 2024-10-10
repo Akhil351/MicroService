@@ -1,0 +1,11 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: GATEWAY-SERVICE
+  profiles:
+    active: gateway,server
+  config:
+    import:
+      - "optional:configserver:http://localhost:9009"

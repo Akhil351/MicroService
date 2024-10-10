@@ -1,6 +1,6 @@
 server:
   port:
-    2002
+    8001
 spring:
   application:
     name: PRODUCT-CATALOG-SERVICE
