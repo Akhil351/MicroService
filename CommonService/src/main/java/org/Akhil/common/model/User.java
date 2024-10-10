@@ -1,13 +1,17 @@
 package org.Akhil.common.model;
 
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,4 +27,7 @@ public class User {
     private String email;
     private String password;
     private String phoneNumber;
+    @ElementCollection
+    @CollectionTable(name = "user_roles",joinColumns = @JoinColumn(name="user_id"))
+    private List<Integer> roles;
 }
