@@ -44,22 +44,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Order placeOrder(String userId) {
+    public OrderDto placeOrder(String userId) {
         Cart cart=cartService.getCartByUserId(userId);
         Order order=this.createOrder(cart);
         List<OrderItem> orderItems=this.createOrderItems(order.getOrderId(), cart.getId());
         order.setTotalAmount(this.calculateTotalAmount(orderItems));
- //       order.setOrderStatus(OrderStatus.DELIVERED);
         Order saveOrder=orderRepo.save(order);
         orderItemRepo.saveAll(orderItems);
         cartService.clearCart(cart.getId());
-        return saveOrder;
+        return this.convertToDto(saveOrder);
     }
     private Order createOrder(Cart cart){
         return   Order.builder()
                 .orderId(UUID.randomUUID().toString())
                 .orderDate(LocalDate.now())
-                .orderStatus(OrderStatus.PENDING)
+                .orderStatus(OrderStatus.code("Pending"))
                 .userId(cart.getUserId())
                 .build();
     }
@@ -94,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderDto convertToDto(Order order){
         OrderDto orderDto= converter.convertToDto(order,OrderDto.class);
-        orderDto.setStatus(order.getOrderStatus().getStatus());
+        orderDto.setStatus(OrderStatus.status(order.getOrderStatus()));
         orderDto.setOrderItems(orderItemRepo.findByOrderId(orderDto.getOrderId()).stream().map(this::convertToOrderDto).toList());
         return orderDto;
     }

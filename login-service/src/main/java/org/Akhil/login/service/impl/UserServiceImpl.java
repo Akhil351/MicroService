@@ -8,6 +8,7 @@ import org.Akhil.common.request.UpdateUserRequest;
 import org.Akhil.common.request.UserRequest;
 import org.Akhil.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import java.util.UUID;
@@ -16,6 +17,8 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public User getUserById(String userId) {
         return userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User Not Found"));
@@ -28,7 +31,7 @@ public class UserServiceImpl implements UserService {
                         .id(UUID.randomUUID().toString())
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
-                        .password(user.getPassword())
+                        .password(passwordEncoder.encode(user.getPassword()))
                         .phoneNumber(user.getPhoneNumber())
                         .email(user.getEmail())
                         .build());

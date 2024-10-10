@@ -1,15 +1,12 @@
 package org.Akhil.common.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.Akhil.common.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,7 +23,6 @@ public class Order {
     private LocalDate orderDate;
     @Builder.Default
     private BigDecimal totalAmount=BigDecimal.ZERO;
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private Integer orderStatus;
     private String userId;
 }

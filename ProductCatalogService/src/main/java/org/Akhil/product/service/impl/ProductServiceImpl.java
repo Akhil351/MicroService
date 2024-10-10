@@ -142,12 +142,17 @@ public class ProductServiceImpl implements ProductService {
         if(ObjectUtils.isEmpty(params.get("searchKey"))) return productRepo.findAll();
         Object searchKey=params.get("searchKey");
         SpecificationBuilder<Product> specificationBuilder=new SpecificationBuilder<>();
-        Specification<Product> spec=specificationBuilder.contains("name",searchKey)
+        Specification<Product> spec=null;
+        Specification<Product> spec2;
+        if(searchKey.toString().matches("\\d+")){
+             spec= specificationBuilder.equal("price",searchKey)
+                     .or(specificationBuilder.equal("inventory",searchKey))
+                    .or(specificationBuilder.equal("id",searchKey));
+        }
+        spec2=specificationBuilder.contains("name",searchKey)
                                    .or(specificationBuilder.contains("brand",searchKey))
-                                   .or(specificationBuilder.contains("description",searchKey))
-                                   .or(specificationBuilder.equal("price",searchKey))
-                                   .or(specificationBuilder.equal("inventory",searchKey))
-                                   .or(specificationBuilder.equal("id",searchKey));
+                                   .or(specificationBuilder.contains("description",searchKey));
+        spec=(spec!=null)?spec.or(spec2):spec2;
         return productRepo.findAll(spec);
     }
 }

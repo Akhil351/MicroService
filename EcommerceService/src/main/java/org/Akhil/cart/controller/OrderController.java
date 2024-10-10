@@ -22,7 +22,7 @@ public class OrderController {
     private OrderService orderService;
     @PostMapping("/order")
     public ResponseEntity<ApiResponse> createOrder(@RequestParam String userId){
-        Order order=orderService.placeOrder(userId);
+        OrderDto order=orderService.placeOrder(userId);
         return ResponseEntity.ok(ApiResponse.builder().message("Order Success").data(order).build());
     }
 
