@@ -9,13 +9,16 @@ import org.Akhil.common.model.Product;
 import org.Akhil.common.repo.CategoryRepo;
 import org.Akhil.common.repo.ImageRepo;
 import org.Akhil.common.repo.ProductRepo;
+import org.Akhil.common.specification.SpecificationBuilder;
 import org.Akhil.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -132,5 +135,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getConvertedProducts(List<Product> products) {
         return products.stream().map(this::convertToDto).toList();
+    }
+
+    @Override
+    public List<Product> searchKey(Map<String, Object> params) {
+        if(ObjectUtils.isEmpty(params.get("searchKey"))) return productRepo.findAll();
+        Object searchKey=params.get("searchKey");
+        SpecificationBuilder<Product> specificationBuilder=new SpecificationBuilder<>();
+        Specification<Product> spec=specificationBuilder.contains("name",searchKey)
+                                   .or(specificationBuilder.contains("brand",searchKey))
+                                   .or(specificationBuilder.contains("description",searchKey))
+                                   .or(specificationBuilder.equal("price",searchKey))
+                                   .or(specificationBuilder.equal("inventory",searchKey))
+                                   .or(specificationBuilder.equal("id",searchKey));
+        return productRepo.findAll(spec);
     }
 }

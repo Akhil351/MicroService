@@ -2,12 +2,13 @@ package org.Akhil.common.repo;
 
 import org.Akhil.common.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ProductRepo extends JpaRepository<Product,Long> {
+public interface ProductRepo extends JpaRepository<Product,Long>, JpaSpecificationExecutor<Product> {
     List<Product> findByCategoryId(Long categoryId);
     List<Product> findByBrand(String brand);
     List<Product> findByCategoryIdAndBrand(Long categoryId,String brand);

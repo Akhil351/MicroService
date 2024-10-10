@@ -4,6 +4,7 @@ import org.Akhil.common.dto.ProductDto;
 import org.Akhil.common.model.Product;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductService {
     Product addProduct(ProductDto productDto);
@@ -19,4 +20,5 @@ public interface ProductService {
     public Long countProductsByBrandAndName(String brand,String name);
     ProductDto convertToDto(Product product);
     List<ProductDto> getConvertedProducts(List<Product> products);
+    List<Product> searchKey(Map<String,Object> params);
 }

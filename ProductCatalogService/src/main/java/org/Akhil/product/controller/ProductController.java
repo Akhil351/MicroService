@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -163,6 +164,11 @@ public class ProductController {
         catch (Exception e){
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message(e.getMessage()).data(null).build());
         }
+    }
+    @GetMapping("/searchKey")
+    public ResponseEntity<ApiResponse> searchKey(@RequestBody Map<String,Object> params){
+        List<ProductDto> products=productService.getConvertedProducts(productService.searchKey(params));
+        return ResponseEntity.ok(ApiResponse.builder().message("Success").data(products).build());
     }
 
 
