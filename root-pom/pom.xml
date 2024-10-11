@@ -16,6 +16,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>21</java.version>
+		<service-version>[akhil-1.0,akhil-1.9999]</service-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -34,6 +35,16 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.Akhil</groupId>
+				<artifactId>COMMON-SERVICE</artifactId>
+				<version>${service-version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
