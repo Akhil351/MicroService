@@ -1,4 +1,4 @@
-package org.Akhil.login.config;
+package org.Akhil.login.config.userDetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

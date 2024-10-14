@@ -3,6 +3,7 @@ package org.Akhil.login.exception;
 
 import org.Akhil.common.exception.AlreadyExistException;
 import org.Akhil.common.exception.ResourceNotFoundException;
+import org.Akhil.common.exception.TokenInvalid;
 import org.Akhil.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +26,11 @@ public class GlobalException {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiResponse> usernameNotFound(UsernameNotFoundException exception){
         return ResponseEntity.status(NOT_FOUND).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+    }
+
+    @ExceptionHandler(TokenInvalid.class)
+    public ResponseEntity<ApiResponse> tokenInvalid(TokenInvalid exception){
+        return ResponseEntity.status(UNAUTHORIZED).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
     }
 
     @ExceptionHandler(Exception.class)

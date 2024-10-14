@@ -6,7 +6,8 @@ import org.Akhil.common.exception.UserAlreadyExist;
 import org.Akhil.common.model.User;
 import org.Akhil.common.repo.UserRepo;
 import org.Akhil.common.request.UserRequest;
-import org.Akhil.login.config.CustomerDetailsService;
+import org.Akhil.login.config.jwt.JwtService;
+import org.Akhil.login.config.userDetails.CustomerDetailsService;
 import org.Akhil.login.request.LoginRequest;
 import org.Akhil.login.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class AuthServiceImpl implements AuthService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private CustomerDetailsService customerDetailsService;
+    @Autowired
+    private JwtService jwtService;
     @Override
     public User createUser(UserRequest user) {
         userRepo.findByEmail(user.getEmail()).ifPresent((u)->{throw new UserAlreadyExist("user with email "+user.getEmail()+ " already exist");});
@@ -50,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
     public String login(LoginRequest request) {
         Authentication authentication=this.authentication(request.getEmail(),request.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "Generate Token";
+        return jwtService.generateKey(authentication);
     }
     private Authentication authentication(String email,String password){
         UserDetails customerDetails=customerDetailsService.loadUserByUsername(email);
