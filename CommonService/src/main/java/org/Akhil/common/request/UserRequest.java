@@ -2,6 +2,8 @@ package org.Akhil.common.request;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UserRequest {
     private String firstName;
@@ -9,4 +11,5 @@ public class UserRequest {
     private String email;
     private String password;
     private String phoneNumber;
+    private List<String> role;
 }

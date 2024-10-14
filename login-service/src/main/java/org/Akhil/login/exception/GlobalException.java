@@ -5,6 +5,7 @@ import org.Akhil.common.exception.AlreadyExistException;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -18,6 +19,11 @@ public class GlobalException {
     }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFound(ResourceNotFoundException exception){
+        return ResponseEntity.status(NOT_FOUND).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ApiResponse> usernameNotFound(UsernameNotFoundException exception){
         return ResponseEntity.status(NOT_FOUND).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
     }
 
