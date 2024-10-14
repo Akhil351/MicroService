@@ -36,8 +36,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Long initializeNewCart() {
+    public Long initializeNewCart(String userId) {
         Cart cart=new Cart();
+        cart.setUserId(userId);
         return cartRepo.save(cart).getId();
     }
 

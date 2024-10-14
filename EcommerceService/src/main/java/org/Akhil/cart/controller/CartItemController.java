@@ -6,8 +6,13 @@ import org.Akhil.common.response.ApiResponse;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -22,12 +27,9 @@ public class CartItemController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId,@RequestParam Long productId,@RequestParam Integer quantity){
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam String userId,@RequestParam Long productId,@RequestParam Integer quantity){
            try{
-               if(ObjectUtils.isEmpty(cartId)){
-                   cartId=cartService.initializeNewCart();
-               }
-               cartItemService.addItemToCart(cartId,productId,quantity);
+               cartItemService.addItemToCart(userId,productId,quantity);
                return ResponseEntity.ok(ApiResponse.builder().message("Added Item SuccessFully").data(null).build());
            }
            catch (ResourceNotFoundException e){

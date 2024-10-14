@@ -29,12 +29,12 @@ public class CartItemServiceImpl implements CartItemService {
     @Autowired
     private ProductClient productClient;
     @Override
-    public void addItemToCart(Long cartId, Long productId, int quantity) {
-        Cart cart=cartService.getCart(cartId);
+    public void addItemToCart(String userId, Long productId, int quantity) {
+        Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
         Product product=productClient.getProductById(productId);
-        CartItem cartItem=cartItemRepo.findByCartIdAndProductId(cartId,productId).orElse(new CartItem());
+        CartItem cartItem=cartItemRepo.findByCartIdAndProductId(cart.getId(),productId).orElse(new CartItem());
         if(ObjectUtils.isEmpty(cartItem.getId())){
-            cartItem.setCartId(cartId);
+            cartItem.setCartId(cart.getId());
             cartItem.setProductId(productId);
             cartItem.setQuantity(quantity);
             cartItem.setUnitPrice(product.getPrice());

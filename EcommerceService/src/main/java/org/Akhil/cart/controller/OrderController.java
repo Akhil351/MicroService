@@ -2,7 +2,6 @@ package org.Akhil.cart.controller;
 
 import org.Akhil.cart.service.OrderService;
 import org.Akhil.common.dto.OrderDto;
-import org.Akhil.common.model.Order;
 import org.Akhil.common.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

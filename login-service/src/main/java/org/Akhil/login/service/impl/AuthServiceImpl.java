@@ -10,6 +10,7 @@ import org.Akhil.login.config.jwt.JwtService;
 import org.Akhil.login.config.userDetails.CustomerDetailsService;
 import org.Akhil.login.request.LoginRequest;
 import org.Akhil.login.service.AuthService;
+import org.Akhil.login.service.CartClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,13 +33,15 @@ public class AuthServiceImpl implements AuthService {
     private CustomerDetailsService customerDetailsService;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private CartClient cartClient;
     @Override
     public User createUser(UserRequest user) {
         userRepo.findByEmail(user.getEmail()).ifPresent((u)->{throw new UserAlreadyExist("user with email "+user.getEmail()+ " already exist");});
         List<Integer> roles;
         if(ObjectUtils.isEmpty(user.getRole())) roles=List.of(101);
         else roles=user.getRole().stream().map(Role::code).toList();
-        return userRepo.save(User.builder()
+        User theUser=userRepo.save(User.builder()
                 .id(UUID.randomUUID().toString())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -47,6 +50,8 @@ public class AuthServiceImpl implements AuthService {
                 .email(user.getEmail())
                 .roles(roles)
                 .build());
+        cartClient.initializeNewCart(theUser.getId());
+        return theUser;
     }
 
     @Override

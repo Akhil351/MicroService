@@ -6,11 +6,14 @@ import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.model.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 
 import java.math.BigDecimal;
 
@@ -55,8 +58,8 @@ public class CartController {
         }
     }
 
-    @GetMapping("/initializeNewCart")
-    public Long getCartId(){
-        return cartService.initializeNewCart();
+    @PostMapping("/initializeNewCart")
+    public Long initializeNewCart(@RequestParam String userId){
+        return cartService.initializeNewCart(userId);
     }
 }
