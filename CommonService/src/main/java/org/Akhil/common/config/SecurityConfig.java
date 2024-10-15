@@ -1,7 +1,8 @@
-package org.Akhil.login.config;
+package org.Akhil.common.config;
 
-import org.Akhil.login.config.jwt.JwtFilter;
-import org.Akhil.login.config.userDetails.CustomerDetailsService;
+import org.Akhil.common.config.jwt.JwtFilter;
+import org.Akhil.common.config.userDetails.CustomerDetailsService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -27,12 +29,29 @@ public class SecurityConfig {
     }
 
     @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(request->
-                        request.requestMatchers("/api/v2/user/**").authenticated().anyRequest().permitAll())
+                .authorizeHttpRequests(request ->
+                        request
+                                .requestMatchers(
+                                        "/api/v2/user/**",
+                                        "/api/v2/products/**",
+                                        "/api/v2/categories/**",
+                                        "/api/v2/images/**",
+                                        "/api/v2/carts/**",
+                                        "/api/v2/cartItems/**",
+                                        "/api/v2/orders/**"
+                                ).authenticated()
+                                .anyRequest().permitAll()
+                )
+
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
