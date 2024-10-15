@@ -1,5 +1,7 @@
 package org.Akhil.login.service.impl;
 
+import org.Akhil.common.config.jwt.JwtService;
+import org.Akhil.common.config.userDetails.CustomerDetailsService;
 import org.Akhil.common.enums.Role;
 import org.Akhil.common.exception.InvalidCredential;
 import org.Akhil.common.exception.UserAlreadyExist;
@@ -8,8 +10,6 @@ import org.Akhil.common.model.User;
 import org.Akhil.common.repo.RolesRepo;
 import org.Akhil.common.repo.UserRepo;
 import org.Akhil.common.request.UserRequest;
-import org.Akhil.login.config.jwt.JwtService;
-import org.Akhil.login.config.userDetails.CustomerDetailsService;
 import org.Akhil.login.request.LoginRequest;
 import org.Akhil.login.service.AuthService;
 import org.Akhil.login.service.CartClient;

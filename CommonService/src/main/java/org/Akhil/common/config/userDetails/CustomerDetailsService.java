@@ -1,4 +1,4 @@
-package org.Akhil.login.config.userDetails;
+package org.Akhil.common.config.userDetails;
 
 import org.Akhil.common.model.Roles;
 import org.Akhil.common.model.User;

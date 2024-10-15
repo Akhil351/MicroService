@@ -1,12 +1,12 @@
-package org.Akhil.login.config.jwt;
+package org.Akhil.common.config.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.Akhil.common.config.userDetails.CustomerDetails;
 import org.Akhil.common.exception.TokenInvalid;
 import org.Akhil.common.util.JwtUtils;
-import org.Akhil.login.config.userDetails.CustomerDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
