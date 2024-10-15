@@ -21,8 +21,8 @@ public class CustomerDetails implements UserDetails {
     private String password;
     private Collection<SimpleGrantedAuthority> authorities;
 
-    public static CustomerDetails buildUserDetails(User user){
-         List<SimpleGrantedAuthority> authorities= user.getRoles()
+    public static CustomerDetails buildUserDetails(User user,List<Integer> roles){
+         List<SimpleGrantedAuthority> authorities= roles
                  .stream()
                  .map(Role::role)
                  .map(SimpleGrantedAuthority::new)

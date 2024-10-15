@@ -3,7 +3,9 @@ package org.Akhil.login.service.impl;
 import org.Akhil.common.enums.Role;
 import org.Akhil.common.exception.InvalidCredential;
 import org.Akhil.common.exception.UserAlreadyExist;
+import org.Akhil.common.model.Roles;
 import org.Akhil.common.model.User;
+import org.Akhil.common.repo.RolesRepo;
 import org.Akhil.common.repo.UserRepo;
 import org.Akhil.common.request.UserRequest;
 import org.Akhil.login.config.jwt.JwtService;
@@ -28,6 +30,8 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private UserRepo userRepo;
     @Autowired
+    private RolesRepo rolesRepo;
+    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private CustomerDetailsService customerDetailsService;
@@ -48,10 +52,18 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(user.getPassword()))
                 .phoneNumber(user.getPhoneNumber())
                 .email(user.getEmail())
-                .roles(roles)
                 .build());
+        saveRole(roles,theUser.getId());
         cartClient.initializeNewCart(theUser.getId());
         return theUser;
+    }
+    private void saveRole(List<Integer> roles,String userId){
+      roles.stream().map(role->Roles.builder()
+              .id(UUID.randomUUID().toString())
+              .role(role)
+              .userId(userId)
+              .build())
+              .forEach(rolesRepo::save);
     }
 
     @Override
