@@ -51,8 +51,7 @@ public class SecurityConfig {
                                 ).authenticated()
                                 .anyRequest().permitAll()
                 )
-
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+              .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 //    @Bean
