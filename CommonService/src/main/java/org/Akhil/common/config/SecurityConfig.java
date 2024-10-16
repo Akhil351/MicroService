@@ -42,7 +42,9 @@ public class SecurityConfig {
                         request
                                 .requestMatchers(
                                         "/api/v2/user/**",
-                                        "/api/v2/products/**",
+                                        "/api/v2/products/add",
+                                        "/api/v2/products/delete/**",
+                                        "/api/v2/products/update/**",
                                         "/api/v2/categories/**",
                                         "/api/v2/images/**",
                                         "/api/v2/carts/**",
