@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "ECOMMERCE-SERVICE",url = "http://localhost:3003")
 public interface CartClient {
-    @PostMapping("/api/v2/carts/initializeNewCart")
+    @PostMapping("/initializeNewCart")
     public void initializeNewCart(@RequestParam String userId);
 }
