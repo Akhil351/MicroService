@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(user.getEmail())
                 .build());
         saveRole(roles,theUser.getId());
-        cartClient.initializeNewCart(theUser.getId());
+    //    cartClient.initializeNewCart(theUser.getId());
         return theUser;
     }
     private void saveRole(List<Integer> roles,String userId){

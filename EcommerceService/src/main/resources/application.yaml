@@ -4,7 +4,7 @@ spring:
   application:
     name: ECOMMERCE-SERVICE
   profiles:
-    active: db,server
+    active: db,mongo,server
   config:
     import:
       - "optional:configserver:http://localhost:9009"
