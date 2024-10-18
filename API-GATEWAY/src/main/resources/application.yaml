@@ -5,7 +5,7 @@ spring:
   application:
     name: GATEWAY-SERVICE
   profiles:
-    active: gateway,server,db,mongo
+    active: gateway,server
   config:
     import:
       - "optional:configserver:http://localhost:9009"

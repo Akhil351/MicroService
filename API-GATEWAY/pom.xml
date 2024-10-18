@@ -3,9 +3,10 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 <modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.Akhil</groupId>
-		<artifactId>root-pom</artifactId>
-		<version>akhil-1.0</version>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.Akhil</groupId>
 	<artifactId>GATEWAY-SERVICE</artifactId>
@@ -21,12 +22,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-gateway</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.Akhil</groupId>
-			<artifactId>COMMON-SERVICE</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
