@@ -1,4 +1,4 @@
-package org.Akhil.common.config;
+package org.Akhil.common.config.security;
 
 import org.Akhil.common.config.jwt.JwtFilter;
 import org.Akhil.common.config.userDetails.CustomerDetailsService;
