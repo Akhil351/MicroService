@@ -58,6 +58,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("@securityValidate.isAdmin()")
     @PutMapping("/update/{productId}")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductDto productDto,@PathVariable Long productId){
         try{
@@ -69,7 +70,7 @@ public class ProductController {
         }
     }
 
-
+    @PreAuthorize("@securityValidate.isAdmin()")
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId){
         try{
