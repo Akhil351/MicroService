@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
         if(ObjectUtils.isEmpty(user.getRole())) roles=List.of(101);
         else roles=user.getRole().stream().map(Role::code).toList();
         User theUser=userRepo.save(User.builder()
-                .id(UUID.randomUUID().toString())
+                .id("u"+UUID.randomUUID().toString())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .password(passwordEncoder.encode(user.getPassword()))

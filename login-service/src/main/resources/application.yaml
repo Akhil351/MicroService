@@ -1,6 +1,6 @@
 server:
   port:
-    9081
+    9001
 spring:
   application:
     name: LOGIN-SERVICE
