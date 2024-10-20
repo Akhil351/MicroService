@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
-@FeignClient(name="LOGIN-SERVICE",url="http://localhost:9081")
+@FeignClient(name="LOGIN-SERVICE",url="http://localhost:9001")
 public interface LoginClient {
     @PostMapping("/checking")
     public boolean checking(@RequestParam Map<String,String> map);
