@@ -1,16 +1,15 @@
-package org.Akhil.login.exception;
+package org.Akhil.common.exception;
 
-
-import org.Akhil.common.exception.AlreadyExistException;
-import org.Akhil.common.exception.ResourceNotFoundException;
-import org.Akhil.common.exception.TokenInvalid;
+import feign.FeignException;
 import org.Akhil.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
 public class GlobalException {
@@ -35,6 +34,11 @@ public class GlobalException {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> internalServerError(Exception exception){
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ApiResponse> feignClient(FeignException exception){
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
     }
 }
