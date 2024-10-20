@@ -6,6 +6,7 @@ import org.Akhil.common.model.Category;
 import org.Akhil.product.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class CategoryController {
             return ResponseEntity.ok(ApiResponse.builder().message("Found!").data(categories).build());
     }
 
+    @PreAuthorize("@securityValidate.isAdmin()")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category){
             Category theCategory=categoryService.addCategory(category);
@@ -49,12 +51,14 @@ public class CategoryController {
             return ResponseEntity.ok(ApiResponse.builder().message("Found!").data(theCategory).build());
     }
 
+    @PreAuthorize("@securityValidate.isAdmin()")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id){
             categoryService.deleteCategoryById(id);
             return ResponseEntity.ok(ApiResponse.builder().message("Deleted SuccessFully").data(null).build());
     }
 
+    @PreAuthorize("@securityValidate.isAdmin()")
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id,@RequestBody Category category){
             Category theCategory=categoryService.updateCategory(category,id);
