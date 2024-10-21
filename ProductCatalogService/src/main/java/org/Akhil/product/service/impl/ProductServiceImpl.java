@@ -92,7 +92,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProductsByCategory(String category) {
-        return productRepo.findByCategoryId(this.getCategory(category).getId());
+        return productRepo.findByCategoryId(this.findByCategoryName(category).getId());
+    }
+    private Category findByCategoryName(String category){
+        return categoryRepo.findByName(category).orElseThrow(()->new ResourceNotFoundException("Category Not Found"));
     }
 
     @Override
@@ -102,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return productRepo.findByCategoryIdAndBrand(this.getCategory(category).getId(),brand);
+        return productRepo.findByCategoryIdAndBrand(this.findByCategoryName(category).getId(),brand);
     }
 
     @Override
