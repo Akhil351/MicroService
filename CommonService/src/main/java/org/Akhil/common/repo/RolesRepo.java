@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface RolesRepo extends MongoRepository<Roles,String> {
     List<Roles> findByUserId(String userId);
+    void deleteAllByUserId(String userId);
 }

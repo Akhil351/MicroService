@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-
-
 import java.math.BigDecimal;
 
 
@@ -25,12 +22,6 @@ public class CartController {
     public ResponseEntity<Cart> getCart(@PathVariable Long id){
             Cart cart=cartService.getCart(id);
             return ResponseEntity.ok(cart);
-    }
-
-    @DeleteMapping("/{id}/clear")
-    public ResponseEntity<ApiResponse> deleteCart(@PathVariable Long id){
-            cartService.clearCart(id);
-            return ResponseEntity.ok(ApiResponse.builder().message("Cart Deleted Successfully").data(null).build());
     }
 
     @GetMapping("/{id}/cart/total/price")

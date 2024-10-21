@@ -24,12 +24,6 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
-
-    @GetMapping("/{userId}/user")
-    public ResponseEntity<ApiResponse> getUserById(@PathVariable String userId){
-            UserDto user=userService.getUserById(userId);
-            return ResponseEntity.ok(ApiResponse.builder().message("Success").data(user).build());
-    }
     @PutMapping("/{userId}/update")
     public ResponseEntity<ApiResponse> updateUser(@RequestBody UpdateUserRequest user,@PathVariable String userId){
         User theUser=userService.updateUser(user,userId);
@@ -44,8 +38,8 @@ public class UserController {
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
-    @GetMapping("/{getAllUsers}")
-    public  ResponseEntity<ApiResponse> getAllUsers(@RequestBody Map<String,String> params){
+    @GetMapping("/getAllUsers")
+    public  ResponseEntity<ApiResponse> getAllUsers(@RequestBody(required = false) Map<String,String> params){
         List<UserDto> users=userService.getAllUsers(params);
         return ResponseEntity.ok(ApiResponse.builder().message("Success").data(users).build());
     }

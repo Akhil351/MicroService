@@ -1,15 +1,16 @@
 package org.Akhil.login.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.Akhil.common.dto.UserDto;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.mapper.Converter;
 import org.Akhil.common.model.User;
+import org.Akhil.common.repo.RolesRepo;
 import org.Akhil.common.repo.UserRepo;
 import org.Akhil.common.request.UpdateUserRequest;
-import org.Akhil.common.specification.SpecificationBuilder;
+import org.Akhil.login.service.CartClient;
 import org.Akhil.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -21,11 +22,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
     @Autowired
+    private RolesRepo rolesRepo;
+    @Autowired
     private Converter converter;
-    @Override
-    public UserDto getUserById(String userId) {
-        return this.convertToDto(userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User Not Found")));
-    }
+    @Autowired
+    private CartClient cartClient;
     @Override
     public User updateUser(UpdateUserRequest user, String userId) {
         return userRepo.findById(userId)
@@ -39,22 +40,17 @@ public class UserServiceImpl implements UserService {
         return existingUser;
     }
 
+    @Transactional
     @Override
     public void deleteUser(String userId) {
         userRepo.findById(userId).ifPresentOrElse(userRepo::delete,()->{throw new ResourceNotFoundException("User Not Found");});
+        rolesRepo.deleteAllByUserId(userId);
+        cartClient.deleteCart(userId);
     }
 
     @Override
     public List<UserDto> getAllUsers(Map<String,String> params) {
-        if(ObjectUtils.isEmpty(params.get("searchKey"))) return userRepo.findAll().stream().map(this::convertToDto).toList();
-        Object searchKey=params.get("searchKey");
-        SpecificationBuilder<User> specificationBuilder=new SpecificationBuilder<>();
-        Specification<User> spec=specificationBuilder.contains("id",searchKey)
-                .or(specificationBuilder.contains("firstName",searchKey))
-                .or(specificationBuilder.contains("lastName",searchKey))
-                .or(specificationBuilder.contains("email",searchKey))
-                .or(specificationBuilder.contains("phoneNumber",searchKey));
-        return userRepo.findAll(spec).stream().map(this::convertToDto).toList();
+        return userRepo.findAll().stream().map(this::convertToDto).toList();
     }
     private UserDto convertToDto(User user){
         return converter.convertToDto(user, UserDto.class);

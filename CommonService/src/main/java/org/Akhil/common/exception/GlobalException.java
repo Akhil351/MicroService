@@ -3,6 +3,7 @@ package org.Akhil.common.exception;
 import feign.FeignException;
 import org.Akhil.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,6 +35,21 @@ public class GlobalException {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> internalServerError(Exception exception){
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ApiResponse> authorizationDeniedException(AuthorizationDeniedException exception){
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+    }
+
+    @ExceptionHandler(UserAlreadyExist.class)
+    public ResponseEntity<ApiResponse> userAlreadyExist(UserAlreadyExist exception){
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+    }
+
+    @ExceptionHandler(InvalidCredential.class)
+    public ResponseEntity<ApiResponse> invalidCredential(InvalidCredential exception){
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
     }
 

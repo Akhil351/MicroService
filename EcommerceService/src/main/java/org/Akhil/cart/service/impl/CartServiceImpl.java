@@ -24,9 +24,10 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
-    public void clearCart(Long id) {
-        cartItemRepo.deleteAllByCartId(id);
-        cartRepo.deleteById(id);
+    public void clearCart(String userId) {
+        Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
+        cartItemRepo.deleteAllByCartId(cart.getId());
+        cartRepo.delete(cart);
     }
 
     @Override
