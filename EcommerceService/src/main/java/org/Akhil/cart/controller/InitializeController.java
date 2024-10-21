@@ -22,7 +22,7 @@ public class InitializeController {
 
     @DeleteMapping("/{userId}/clear")
     public ResponseEntity<ApiResponse> deleteCart(@PathVariable String userId){
-        cartService.clearCart(userId);
+        cartService.deleteCart(userId);
         return ResponseEntity.ok(ApiResponse.builder().message("Cart Deleted Successfully").data(null).build());
     }
 }
