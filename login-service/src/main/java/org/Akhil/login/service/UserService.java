@@ -1,11 +1,15 @@
 package org.Akhil.login.service;
 
+import org.Akhil.common.dto.UserDto;
 import org.Akhil.common.model.User;
 import org.Akhil.common.request.UpdateUserRequest;
-import org.Akhil.common.request.UserRequest;
+
+import java.util.List;
+import java.util.Map;
 
 public interface UserService {
-    User getUserById(String userId);
+    UserDto getUserById(String userId);
     User updateUser(UpdateUserRequest user, String userId);
     void deleteUser(String userId);
+    List<UserDto> getAllUsers(Map<String,String> params);
 }
