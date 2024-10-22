@@ -27,11 +27,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllProducts(){
-        List<ProductDto> products=productService.getConvertedProducts(productService.getAllProducts());
-        return ResponseEntity.ok(ApiResponse.builder().message("success").data(products).build());
-    }
     @GetMapping("/getProductById/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId){
             Product product=productService.getProductById(productId);
@@ -59,58 +54,13 @@ public class ProductController {
             return ResponseEntity.ok(ApiResponse.builder().message("Product Deleted SuccessFully").data(null).build());
     }
 
-    @GetMapping("/getProductsByBrandAndName")
-    public ResponseEntity<ApiResponse> getProductsByBrandAndName(@RequestParam String brandName,@RequestParam String productName){
-           List<ProductDto> products=productService.getConvertedProducts(productService.getProductsByBrandAndName(brandName,productName));
-           if(products.isEmpty()){
-               return ResponseEntity.ok(ApiResponse.builder().message("Not Found").data(null).build());
-           }
-            return ResponseEntity.ok(ApiResponse.builder().message("Success").data(products).build());
-    }
-
-    @GetMapping("/getProductsByCategoryAndBrand")
-    public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@RequestParam String category,@RequestParam String brandName){
-            List<ProductDto> products=productService.getConvertedProducts(productService.getProductsByCategoryAndBrand(category,brandName));
-            if(products.isEmpty()){
-                return ResponseEntity.ok(ApiResponse.builder().message("Not Found").data(null).build());
-            }
-            return ResponseEntity.ok(ApiResponse.builder().message("Success").data(products).build());
-    }
-
-    @GetMapping("/getProductsByName/{name}")
-    public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String name){
-            List<ProductDto> products=productService.getConvertedProducts(productService.getProductsByName(name));
-            if(products.isEmpty()){
-                return ResponseEntity.ok(ApiResponse.builder().message("Not Found").data(null).build());
-            }
-            return ResponseEntity.ok(ApiResponse.builder().message("Success").data(products).build());
-    }
-
-    @GetMapping("/getProductsByBrand")
-    public ResponseEntity<ApiResponse> getProductsByBrand(@RequestParam String brand){
-            List<ProductDto> products=productService.getConvertedProducts(productService.getProductsByBrand(brand));
-            if(products.isEmpty()){
-                return ResponseEntity.ok(ApiResponse.builder().message("Not Found").data(null).build());
-            }
-            return ResponseEntity.ok(ApiResponse.builder().message("Success").data(products).build());
-    }
-
-    @GetMapping("/getProductsByCategory/{category}")
-    public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category){
-            List<ProductDto> products=productService.getConvertedProducts(productService.getProductsByCategory(category));
-            if(products.isEmpty()){
-                return ResponseEntity.ok(ApiResponse.builder().message("Not Found").data(null).build());
-            }
-            return ResponseEntity.ok(ApiResponse.builder().message("Success").data(products).build());
-    }
-
     @GetMapping("/countProductsByBrandAndName")
     public ResponseEntity<ApiResponse> countProductsByBrandAndName(@RequestParam String brandName,@RequestParam String productName){
             Long count=productService.countProductsByBrandAndName(brandName,productName);
             return ResponseEntity.ok(ApiResponse.builder().message("Success").data(count).build());
     }
-    @GetMapping("/searchKey")
-    public ResponseEntity<ApiResponse> searchKey(@RequestBody Map<String,Object> params){
+    @GetMapping("/allProducts")
+    public ResponseEntity<ApiResponse> allProducts(@RequestBody Map<String,Object> params){
         List<ProductDto> products=productService.getConvertedProducts(productService.searchKey(params));
         return ResponseEntity.ok(ApiResponse.builder().message("Success").data(products).build());
     }

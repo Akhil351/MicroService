@@ -84,43 +84,9 @@ public class ProductServiceImpl implements ProductService {
       }
        return existingProduct;
     }
-
-    @Override
-    public List<Product> getAllProducts() {
-        return productRepo.findAll();
-    }
-
-    @Override
-    public List<Product> getProductsByCategory(String category) {
-        return productRepo.findByCategoryId(this.findByCategoryName(category).getId());
-    }
-    private Category findByCategoryName(String category){
-        return categoryRepo.findByName(category).orElseThrow(()->new ResourceNotFoundException("Category Not Found"));
-    }
-
-    @Override
-    public List<Product> getProductsByBrand(String brand) {
-        return productRepo.findByBrand(brand);
-    }
-
-    @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return productRepo.findByCategoryIdAndBrand(this.findByCategoryName(category).getId(),brand);
-    }
-
-    @Override
-    public List<Product> getProductsByName(String name) {
-        return productRepo.findByName(name);
-    }
-
-    @Override
-    public List<Product> getProductsByBrandAndName(String brand, String name) {
-        return productRepo.findByBrandAndName(brand,name);
-    }
-
     @Override
     public Long countProductsByBrandAndName(String brand, String name) {
-        return productRepo.countByBrandAndNameContaining(brand,name);
+        return productRepo.countByBrandContainingAndNameContaining(brand,name);
     }
 
     @Override
