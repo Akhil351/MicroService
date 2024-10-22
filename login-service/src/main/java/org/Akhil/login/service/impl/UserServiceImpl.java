@@ -11,6 +11,9 @@ import org.Akhil.common.request.UpdateUserRequest;
 import org.Akhil.login.service.CartClient;
 import org.Akhil.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -27,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private Converter converter;
     @Autowired
     private CartClient cartClient;
+    @Autowired
+    private MongoTemplate mongoTemplate;
     @Override
     public User updateUser(UpdateUserRequest user, String userId) {
         return userRepo.findById(userId)
@@ -50,7 +55,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers(Map<String,String> params) {
-        return userRepo.findAll().stream().map(this::convertToDto).toList();
+        if(ObjectUtils.isEmpty(params.get("searchKey"))) return userRepo.findAll().stream().map(this::convertToDto).toList();
+        Object searchKey=params.get("searchKey");
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().orOperator(
+                        Criteria.where("firstName").regex(searchKey.toString(), "i"),
+                        Criteria.where("lastName").regex(searchKey.toString(), "i"),
+                        Criteria.where("id").is(searchKey),
+                        Criteria.where("email").regex(searchKey.toString(), "i"),
+                        Criteria.where("phoneNumber").regex(searchKey.toString(), "i")
+                )
+        );
+        return mongoTemplate.find(query,User.class).stream().map(this::convertToDto).toList();
     }
     private UserDto convertToDto(User user){
         return converter.convertToDto(user, UserDto.class);

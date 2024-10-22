@@ -39,7 +39,7 @@ public class UserController {
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @GetMapping("/getAllUsers")
-    public  ResponseEntity<ApiResponse> getAllUsers(@RequestBody(required = false) Map<String,String> params){
+    public  ResponseEntity<ApiResponse> getAllUsers(@RequestBody Map<String,String> params){
         List<UserDto> users=userService.getAllUsers(params);
         return ResponseEntity.ok(ApiResponse.builder().message("Success").data(users).build());
     }
