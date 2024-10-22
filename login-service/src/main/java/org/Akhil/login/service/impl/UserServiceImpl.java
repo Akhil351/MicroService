@@ -1,6 +1,7 @@
 package org.Akhil.login.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.Akhil.common.config.jwt.JwtService;
 import org.Akhil.common.dto.UserDto;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.mapper.Converter;
@@ -32,6 +33,8 @@ public class UserServiceImpl implements UserService {
     private CartClient cartClient;
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private JwtService jwtService;
     @Override
     public User updateUser(UpdateUserRequest user, String userId) {
         return userRepo.findById(userId)
@@ -69,6 +72,14 @@ public class UserServiceImpl implements UserService {
         );
         return mongoTemplate.find(query,User.class).stream().map(this::convertToDto).toList();
     }
+
+    @Override
+    public UserDto userProfile(String jwtToken) {
+        String email=jwtService.getEmail(jwtToken);
+        User user=userRepo.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("User Not Found"));
+        return convertToDto(user);
+    }
+
     private UserDto convertToDto(User user){
         return converter.convertToDto(user, UserDto.class);
     }

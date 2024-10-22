@@ -11,4 +11,5 @@ public interface UserService {
     User updateUser(UpdateUserRequest user, String userId);
     void deleteUser(String userId);
     List<UserDto> getAllUsers(Map<String,String> params);
+    UserDto userProfile(String jwtToken);
 }
