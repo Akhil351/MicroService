@@ -57,4 +57,9 @@ public class GlobalException {
     public ResponseEntity<ApiResponse> feignClient(FeignException exception){
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
     }
+
+    @ExceptionHandler(CartException.class)
+    public ResponseEntity<ApiResponse> cartException(CartException exception){
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+    }
 }

@@ -7,6 +7,7 @@ import org.Akhil.cart.service.ProductClient;
 import org.Akhil.common.dto.OrderDto;
 import org.Akhil.common.dto.OrderItemDto;
 import org.Akhil.common.enums.OrderStatus;
+import org.Akhil.common.exception.CartException;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.mapper.Converter;
 import org.Akhil.common.model.Cart;
@@ -19,7 +20,6 @@ import org.Akhil.common.repo.OrderRepo;
 import org.Akhil.common.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -46,6 +46,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto placeOrder(String userId) {
         Cart cart=cartService.getCartByUserId(userId);
+        if(cart.getTotalAmount().compareTo(BigDecimal.ZERO)==0){
+             throw new CartException("The cart is empty. No items to order.");
+        }
         Order order=this.createOrder(cart);
         List<OrderItem> orderItems=this.createOrderItems(order.getOrderId(), cart.getId());
         order.setTotalAmount(this.calculateTotalAmount(orderItems));
