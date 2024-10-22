@@ -49,9 +49,9 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void removeItemFromCart(Long cartId, Long productId) {
-           Cart cart=cartService.getCart(cartId);
-           CartItem cartItemToRemove=this.getCartItem(cartId,productId);
+    public void removeItemFromCart(String userId, Long productId) {
+           Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
+           CartItem cartItemToRemove=this.getCartItem(cart.getId(),productId);
            cartItemToRemove.setCartId(null);
            cartItemRepo.delete(cartItemToRemove);
            cart.setTotalAmount(this.updateTotalAmountInCart(cart));
@@ -59,9 +59,9 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void updateItemQuantity(Long cartId, Long productId, int quantity) {
-        Cart cart=cartService.getCart(cartId);
-        CartItem cartItem=this.getCartItem(cartId,productId);
+    public void updateItemQuantity(String userId, Long productId, int quantity) {
+        Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
+        CartItem cartItem=this.getCartItem(cart.getId(),productId);
         cartItem.setQuantity(quantity);
         cartItem.setTotalPrice();
         cartItemRepo.save(cartItem);

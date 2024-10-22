@@ -30,15 +30,15 @@ public class CartItemController {
                cartItemService.addItemToCart(userId,productId,quantity);
                return ResponseEntity.ok(ApiResponse.builder().message("Added Item SuccessFully").data(null).build());
     }
-    @DeleteMapping("/cart/{cartId}/item/{productId}/remove")
-    public ResponseEntity<ApiResponse> removeFromCart(@PathVariable Long cartId,@PathVariable Long productId){
-            cartItemService.removeItemFromCart(cartId,productId);
+    @DeleteMapping("/cartItem/{productId}/remove")
+    public ResponseEntity<ApiResponse> removeFromCart(@RequestParam String userId,@PathVariable Long productId){
+            cartItemService.removeItemFromCart(userId,productId);
             return ResponseEntity.ok(ApiResponse.builder().message("Removed Item SuccessFully").data(null).build());
     }
 
-    @PutMapping("/cart/{cartId}/item/{productId}/update")
-    public ResponseEntity<ApiResponse> updateCart(@PathVariable Long cartId,@PathVariable Long productId,@RequestParam Integer quantity){
-            cartItemService.updateItemQuantity(cartId,productId,quantity);
+    @PutMapping("/cartItem/{productId}/update")
+    public ResponseEntity<ApiResponse> updateCart(@RequestParam String userId,@PathVariable Long productId,@RequestParam Integer quantity){
+            cartItemService.updateItemQuantity(userId,productId,quantity);
             return ResponseEntity.ok(ApiResponse.builder().message("Updated Item SuccessFully").data(null).build());
     }
 }

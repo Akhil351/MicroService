@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
             return theUser;
         }
         catch (FeignException e){
-            System.out.println(e);
+            System.out.println("server is down");
             throw  e;
         }
     }
