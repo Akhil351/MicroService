@@ -1,6 +1,6 @@
 package org.Akhil.login.service.impl;
 
-import jakarta.transaction.Transactional;
+import feign.FeignException;
 import org.Akhil.common.config.jwt.JwtService;
 import org.Akhil.common.dto.UserDto;
 import org.Akhil.common.exception.ResourceNotFoundException;
@@ -48,12 +48,17 @@ public class UserServiceImpl implements UserService {
         return existingUser;
     }
 
-    @Transactional
     @Override
     public void deleteUser(String userId) {
-        userRepo.findById(userId).ifPresentOrElse(userRepo::delete,()->{throw new ResourceNotFoundException("User Not Found");});
-        rolesRepo.deleteAllByUserId(userId);
-        cartClient.deleteCart(userId);
+        try{
+            cartClient.deleteCart(userId);
+            userRepo.findById(userId).ifPresentOrElse(userRepo::delete,()->{throw new ResourceNotFoundException("User Not Found");});
+            rolesRepo.deleteAllByUserId(userId);
+        }
+        catch (FeignException e){
+            System.out.println("server is down");
+            throw e;
+        }
     }
 
     @Override

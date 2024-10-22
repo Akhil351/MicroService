@@ -1,5 +1,6 @@
 package org.Akhil.login.service.impl;
 
+import feign.FeignException;
 import org.Akhil.common.config.jwt.JwtService;
 import org.Akhil.common.config.userDetails.CustomerDetailsService;
 import org.Akhil.common.enums.Role;
@@ -42,20 +43,27 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User createUser(UserRequest user) {
         userRepo.findByEmail(user.getEmail()).ifPresent((u)->{throw new UserAlreadyExist("user with email "+user.getEmail()+ " already exist");});
-        List<Integer> roles;
-        if(ObjectUtils.isEmpty(user.getRole())) roles=List.of(101);
-        else roles=user.getRole().stream().map(Role::code).toList();
-        User theUser=userRepo.save(User.builder()
-                .id("u"+UUID.randomUUID().toString())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .phoneNumber(user.getPhoneNumber())
-                .email(user.getEmail())
-                .build());
-        saveRole(roles,theUser.getId());
-        cartClient.initializeNewCart(theUser.getId());
-        return theUser;
+        String userId="u"+UUID.randomUUID().toString();
+        try{
+            cartClient.initializeNewCart(userId);
+            List<Integer> roles;
+            if(ObjectUtils.isEmpty(user.getRole())) roles=List.of(101);
+            else roles=user.getRole().stream().map(Role::code).toList();
+            User theUser=userRepo.save(User.builder()
+                    .id(userId)
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .password(passwordEncoder.encode(user.getPassword()))
+                    .phoneNumber(user.getPhoneNumber())
+                    .email(user.getEmail())
+                    .build());
+            saveRole(roles,theUser.getId());
+            return theUser;
+        }
+        catch (FeignException e){
+            System.out.println(e);
+            throw  e;
+        }
     }
     private void saveRole(List<Integer> roles,String userId){
       roles.stream().map(role->Roles.builder()
