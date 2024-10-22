@@ -61,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
         return   Order.builder()
                 .orderId("o"+UUID.randomUUID().toString())
                 .orderDate(LocalDate.now())
-                .orderStatus(OrderStatus.code("Pending"))
+                .orderStatus(OrderStatus.code("Delivered"))
                 .userId(cart.getUserId())
                 .build();
     }
