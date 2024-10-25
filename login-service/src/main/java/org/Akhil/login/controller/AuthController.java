@@ -1,5 +1,6 @@
 package org.Akhil.login.controller;
 
+import jakarta.validation.Valid;
 import org.Akhil.common.model.User;
 import org.Akhil.common.request.UserRequest;
 import org.Akhil.common.response.ApiResponse;
@@ -20,7 +21,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> createUser(@RequestBody UserRequest user){
+    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserRequest user){
         User theUser=authService.createUser(user);
         return ResponseEntity.ok(ApiResponse.builder().message("Success").data(theUser).build());
     }
