@@ -36,7 +36,7 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.builder().status("Success").data(order).build());
     }
 
-    @GetMapping("/orders")
+    @GetMapping("/getOrders")
     public ResponseEntity<ApiResponse> getOrderByUserId(){
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         CustomerDetails userDetails=(CustomerDetails) authentication.getPrincipal();
