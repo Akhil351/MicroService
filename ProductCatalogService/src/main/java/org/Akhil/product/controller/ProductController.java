@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -38,31 +39,31 @@ public class ProductController {
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody ProductDto productDto){
             ProductDto product=productService.convertToDto(productService.addProduct(productDto));
-            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(product).error(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(product).error(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @PutMapping("/update/{productId}")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductDto productDto,@PathVariable Long productId){
             ProductDto product=productService.convertToDto(productService.updateProduct(productDto,productId));
-            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(product).error(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(product).error(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId){
             productService.deleteProductById(productId);
-            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data("product deleted").error(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data("product deleted").error(null).build());
     }
 
     @GetMapping("/countProductsByBrandAndName")
     public ResponseEntity<ApiResponse> countProductsByBrandAndName(@RequestParam String brandName,@RequestParam String productName){
             Long count=productService.countProductsByBrandAndName(brandName,productName);
-            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(count).error(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(count).error(null).build());
     }
     @GetMapping("/allProducts")
     public ResponseEntity<ApiResponse> allProducts(@RequestBody Map<String,Object> params){
         List<ProductDto> products=productService.getConvertedProducts(productService.searchKey(params));
-        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(products).error(null).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(products).error(null).build());
     }
 }

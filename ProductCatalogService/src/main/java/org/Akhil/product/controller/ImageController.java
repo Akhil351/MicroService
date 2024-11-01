@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -28,20 +29,20 @@ public class ImageController {
     @PostMapping("/upload/{productId}")
     public ResponseEntity<ApiResponse> saveImage(@RequestParam List<MultipartFile>files, @PathVariable Long productId){
             List<ImageDto> images=imageService.saveImage(files,productId);
-            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(images).error(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(images).error(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @PutMapping("/update/{imageId}")
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId,@RequestParam MultipartFile file){
             imageService.updateImage(file,imageId);
-            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data("image updated").error(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data("image updated").error(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @DeleteMapping("/deleteImage/{imageId}")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId){
             imageService.deleteImageById(imageId);
-            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data("image deleted").error(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data("image deleted").error(null).build());
     }
 }

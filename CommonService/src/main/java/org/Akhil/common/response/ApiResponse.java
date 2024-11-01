@@ -2,13 +2,14 @@ package org.Akhil.common.response;
 
 import lombok.Builder;
 import lombok.Data;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 public class ApiResponse {
     private String status;
     @Builder.Default
-    private LocalDate timeStamp=LocalDate.now();
+    private LocalDateTime timeStamp=LocalDateTime.now();
     private Object data;
     private Object error;
 

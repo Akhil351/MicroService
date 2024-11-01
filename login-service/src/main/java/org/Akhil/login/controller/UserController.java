@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -30,26 +31,26 @@ public class UserController {
     @PutMapping("/{userId}/update")
     public ResponseEntity<ApiResponse> updateUser(@RequestBody UpdateUserRequest user,@PathVariable String userId){
         User theUser=userService.updateUser(user,userId);
-        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(theUser).error(null).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(theUser).error(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @DeleteMapping("/{userId}/delete")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable String userId){
         userService.deleteUser(userId);
-        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data("User Deleted").error(null).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data("User Deleted").error(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @GetMapping("/getAllUsers")
     public  ResponseEntity<ApiResponse> getAllUsers(@RequestBody Map<String,String> params){
         List<UserDto> users=userService.getAllUsers(params);
-        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(users).error(null).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(users).error(null).build());
     }
 
     @GetMapping("/profile")
     public ResponseEntity<ApiResponse> userProfile(@RequestHeader(JwtUtils.JWT_HEADER) String jwt){
         UserDto userDto=userService.userProfile(jwt.substring(7));
-        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(userDto).error(null).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(userDto).error(null).build());
     }
 }

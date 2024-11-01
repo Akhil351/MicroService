@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v2/auth")
@@ -25,13 +26,13 @@ public class AuthController {
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody UserRequest user){
         User theUser=authService.createUser(user);
-        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(theUser).error(null).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(theUser).error(null).build());
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest loginRequest){
         String jwtToken=authService.login(loginRequest);
-        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDate.now()).data(jwtToken).error(null).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(jwtToken).error(null).build());
     }
 
 }
