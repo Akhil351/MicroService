@@ -23,6 +23,6 @@ public class InitializeController {
     @DeleteMapping("/{userId}/clear")
     public ResponseEntity<ApiResponse> deleteCart(@PathVariable String userId){
         cartService.deleteCart(userId);
-        return ResponseEntity.ok(ApiResponse.builder().message("Cart Deleted Successfully").data(null).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart deleted").build());
     }
 }

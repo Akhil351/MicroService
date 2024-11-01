@@ -26,19 +26,19 @@ public class OrderController {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         CustomerDetails userDetails=(CustomerDetails) authentication.getPrincipal();
         OrderDto order=orderService.placeOrder(userDetails.getId());
-        return ResponseEntity.ok(ApiResponse.builder().message("Order Success").data(order).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").data(order).build());
     }
 
 
     @GetMapping("/{orderId}/order")
     public ResponseEntity<ApiResponse> getOrderById(@PathVariable String orderId){
         OrderDto order=orderService.getOrder(orderId);
-        return ResponseEntity.ok(ApiResponse.builder().message("Success").data(order).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").data(order).build());
     }
 
     @GetMapping("/{userId}/userOrders")
     public ResponseEntity<ApiResponse> getOrderByUserId(@PathVariable String userId){
         List<OrderDto> orders=orderService.getUserOrders(userId);
-        return ResponseEntity.ok(ApiResponse.builder().message("Success").data(orders).build());
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").data(orders).build());
     }
 }

@@ -1,7 +1,9 @@
 package org.Akhil.common.exception;
 
 import feign.FeignException;
+import org.Akhil.common.enums.ErrorCode;
 import org.Akhil.common.response.ApiResponse;
+import org.Akhil.common.response.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,45 +25,45 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class GlobalException {
     @ExceptionHandler(AlreadyExistException.class)
     public ResponseEntity<ApiResponse> emailAlreadyExist(AlreadyExistException exception){
-        return ResponseEntity.status(CONFLICT).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+        return ResponseEntity.status(CONFLICT).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.CONFLICT.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFound(ResourceNotFoundException exception){
-        return ResponseEntity.status(NOT_FOUND).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+        return ResponseEntity.status(NOT_FOUND).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.NOT_FOUND.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiResponse> usernameNotFound(UsernameNotFoundException exception){
-        return ResponseEntity.status(NOT_FOUND).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+        return ResponseEntity.status(NOT_FOUND).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.NOT_FOUND.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
 
     @ExceptionHandler(TokenInvalid.class)
     public ResponseEntity<ApiResponse> tokenInvalid(TokenInvalid exception){
-        return ResponseEntity.status(UNAUTHORIZED).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+        return ResponseEntity.status(UNAUTHORIZED).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.UNAUTHORIZED.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ApiResponse> authorizationDeniedException(AuthorizationDeniedException exception){
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.INTERNAL_SERVER_ERROR.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
 
     @ExceptionHandler(UserAlreadyExist.class)
     public ResponseEntity<ApiResponse> userAlreadyExist(UserAlreadyExist exception){
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.INTERNAL_SERVER_ERROR.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
 
     @ExceptionHandler(InvalidCredential.class)
     public ResponseEntity<ApiResponse> invalidCredential(InvalidCredential exception){
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.INTERNAL_SERVER_ERROR.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
 
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<ApiResponse> feignClient(FeignException exception){
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.INTERNAL_SERVER_ERROR.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
 
     @ExceptionHandler(CartException.class)
     public ResponseEntity<ApiResponse> cartException(CartException exception){
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().message("Error").data(exception.getMessage()).build());
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.INTERNAL_SERVER_ERROR.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -72,6 +74,6 @@ public class GlobalException {
             String errorMessage=error.getDefaultMessage();
             errors.put(fieldName,errorMessage);
         });
-        return ResponseEntity.status(BAD_REQUEST).body(ApiResponse.builder().message("Error").data(errors).build());
+        return ResponseEntity.status(BAD_REQUEST).body(ApiResponse.builder().status("Error").error(ErrorResponse.builder().errorCode(ErrorCode.BAD_REQUEST.getErrorCode()).errorDescription(errors).build()).build());
     }
 }

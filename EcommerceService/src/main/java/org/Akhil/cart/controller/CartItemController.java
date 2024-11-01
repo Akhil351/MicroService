@@ -33,17 +33,17 @@ public class CartItemController {
                Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
                CustomerDetails userDetails=(CustomerDetails) authentication.getPrincipal();
                cartItemService.addItemToCart(userDetails.getId(),productId,quantity);
-               return ResponseEntity.ok(ApiResponse.builder().message("Added Item SuccessFully").data(null).build());
+               return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart added").build());
     }
     @DeleteMapping("/cartItem/{productId}/remove")
     public ResponseEntity<ApiResponse> removeFromCart(@RequestParam String userId,@PathVariable Long productId){
             cartItemService.removeItemFromCart(userId,productId);
-            return ResponseEntity.ok(ApiResponse.builder().message("Removed Item SuccessFully").data(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart removed").build());
     }
 
     @PutMapping("/cartItem/{productId}/update")
     public ResponseEntity<ApiResponse> updateCart(@RequestParam String userId,@PathVariable Long productId,@RequestParam Integer quantity){
             cartItemService.updateItemQuantity(userId,productId,quantity);
-            return ResponseEntity.ok(ApiResponse.builder().message("Updated Item SuccessFully").data(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart updated").build());
     }
 }

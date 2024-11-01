@@ -29,40 +29,40 @@ public class CategoryController {
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllCategories(){
             List<Category> categories=categoryService.getAllCategories();
-            return ResponseEntity.ok(ApiResponse.builder().message("Found!").data(categories).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").data(categories).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category){
             Category theCategory=categoryService.addCategory(category);
-            return ResponseEntity.ok(ApiResponse.builder().message("Category Added").data(theCategory).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").data(theCategory).build());
     }
 
     @GetMapping("/getCategoryById/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id){
             Category theCategory=categoryService.getCategoryById(id);
-            return ResponseEntity.ok(ApiResponse.builder().message("Found!").data(theCategory).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").data(theCategory).build());
     }
 
     @GetMapping("/getCategoryByName/{name}")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name){
             Category theCategory=categoryService.getCategoryByName(name);
-            return ResponseEntity.ok(ApiResponse.builder().message("Found!").data(theCategory).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").data(theCategory).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id){
             categoryService.deleteCategoryById(id);
-            return ResponseEntity.ok(ApiResponse.builder().message("Deleted SuccessFully").data(null).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").data(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id,@RequestBody Category category){
             Category theCategory=categoryService.updateCategory(category,id);
-            return ResponseEntity.ok(ApiResponse.builder().message("Updated SuccessFully").data(theCategory).build());
+            return ResponseEntity.ok(ApiResponse.builder().status("Success").data(theCategory).build());
     }
 
     @GetMapping("/categoryName/{id}")

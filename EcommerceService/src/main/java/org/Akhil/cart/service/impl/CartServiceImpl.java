@@ -2,8 +2,14 @@ package org.Akhil.cart.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.Akhil.cart.service.CartService;
+import org.Akhil.cart.service.ProductClient;
+import org.Akhil.common.dto.CartDto;
+import org.Akhil.common.dto.CartItemDto;
 import org.Akhil.common.exception.ResourceNotFoundException;
+import org.Akhil.common.mapper.Converter;
 import org.Akhil.common.model.Cart;
+import org.Akhil.common.model.CartItem;
+import org.Akhil.common.model.Product;
 import org.Akhil.common.repo.CartItemRepo;
 import org.Akhil.common.repo.CartRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +23,10 @@ public class CartServiceImpl implements CartService {
     private CartRepo cartRepo;
     @Autowired
     private CartItemRepo cartItemRepo;
+    @Autowired
+    private Converter converter;
+    @Autowired
+    private ProductClient productClient;
     @Override
     public Cart getCart(Long id) {
         return cartRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Cart Not Found"));
@@ -47,6 +57,17 @@ public class CartServiceImpl implements CartService {
     public Cart getCartByUserId(String userId) {
         return cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
     }
+    private CartDto convertToCartDto(Cart cart){
+        CartDto cartDto=converter.convertToDto(cart, CartDto.class);
+        cartDto.setCartItems(cartItemRepo.findByCartId(cart.getId()).stream().map(this::convertToCartItemDto).toList());
+        return cartDto;
+    }
+    private CartItemDto convertToCartItemDto(CartItem cartItem){
+        CartItemDto cartItemDto= converter.convertToDto(cartItem, CartItemDto.class);
+        Product product=productClient.getProductById(cartItem.getProductId());
+        cartItemDto.setProductName(product.getName());
+        return cartItemDto;
+    }
 
     @Transactional
     @Override
@@ -54,5 +75,11 @@ public class CartServiceImpl implements CartService {
         Cart cart=cartRepo.findById(cartId).orElseThrow(()->new ResourceNotFoundException("Cart Not found"));
         cart.setTotalAmount(BigDecimal.ZERO);
         cartItemRepo.deleteAllByCartId(cart.getId());
+    }
+
+    @Override
+    public CartDto displayCurrentUserCart(String userId) {
+        Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
+        return convertToCartDto(cart);
     }
 }
