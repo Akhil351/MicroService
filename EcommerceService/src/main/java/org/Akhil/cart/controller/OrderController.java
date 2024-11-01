@@ -36,9 +36,11 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.builder().status("Success").data(order).build());
     }
 
-    @GetMapping("/{userId}/userOrders")
-    public ResponseEntity<ApiResponse> getOrderByUserId(@PathVariable String userId){
-        List<OrderDto> orders=orderService.getUserOrders(userId);
+    @GetMapping("/orders")
+    public ResponseEntity<ApiResponse> getOrderByUserId(){
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        CustomerDetails userDetails=(CustomerDetails) authentication.getPrincipal();
+        List<OrderDto> orders=orderService.getUserOrders(userDetails.getId());
         return ResponseEntity.ok(ApiResponse.builder().status("Success").data(orders).build());
     }
 }
