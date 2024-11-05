@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -52,5 +53,11 @@ public class UserController {
     public ResponseEntity<ApiResponse> userProfile(){
         UserDto userDto=userService.userProfile(context.getUserId());
         return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(userDto).error(null).build());
+    }
+
+    @GetMapping("/itemsPrice")
+    public ResponseEntity<ApiResponse> getCartBalance(){
+        BigDecimal totalAmount=userService.getCartBalance();
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(totalAmount+" is total price of your cart").error(null).build());
     }
 }

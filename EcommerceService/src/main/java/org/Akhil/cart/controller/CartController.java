@@ -6,10 +6,14 @@ import org.Akhil.common.model.UserRequestContext;
 import org.Akhil.common.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import java.math.BigDecimal;
 
 
@@ -27,9 +31,19 @@ public class CartController {
         return ResponseEntity.ok(ApiResponse.builder().status("Success").data(cart).build());
     }
 
-    @GetMapping("/{id}/cart/total/price")
-    public ResponseEntity<ApiResponse> getTotalAmount(@PathVariable Long id){
-            BigDecimal totalPrice=cartService.getTotalPrice(id);
-            return ResponseEntity.ok(ApiResponse.builder().status("Success").data(totalPrice).build());
+    @GetMapping("/getTotalPrice")
+    public BigDecimal getTotalAmount(){
+        return cartService.getTotalPrice(context.getUserId());
+    }
+
+    @PostMapping("/initializeNewCart")
+    public Long initializeNewCart(@RequestParam String userId){
+        return cartService.initializeNewCart(userId);
+    }
+
+    @DeleteMapping("/{userId}/clear")
+    public ResponseEntity<ApiResponse> deleteCart(@PathVariable String userId){
+        cartService.deleteCart(userId);
+        return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart deleted").build());
     }
 }

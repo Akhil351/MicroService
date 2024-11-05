@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +80,11 @@ public class UserServiceImpl implements UserService {
     public UserDto userProfile(String userId) {
         User user=userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User Not Found"));
         return convertToDto(user);
+    }
+
+    @Override
+    public BigDecimal getCartBalance() {
+        return cartClient.getTotalAmount();
     }
 
     private UserDto convertToDto(User user){

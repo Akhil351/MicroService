@@ -1,6 +1,7 @@
-package org.Akhil.common.config.security;
+package org.Akhil.common.config.security.config;
 
 import org.Akhil.common.config.jwt.JwtFilter;
+import org.Akhil.common.config.security.SecurityValidate;
 import org.Akhil.common.config.userDetails.CustomerDetailsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,8 @@ public class SecurityConfig {
                                         "/api/v2/products/update/**",
                                         "/api/v2/categories/**",
                                         "/api/v2/images/**",
-                                        "/api/v2/carts/**",
+                                        "/api/v2/carts/my-cart",
+                                        "/api/v2/carts/getTotalPrice",
                                         "/api/v2/cartItems/**",
                                         "/api/v2/orders/**"
                                 ).authenticated()

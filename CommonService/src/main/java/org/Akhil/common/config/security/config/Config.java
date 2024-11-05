@@ -1,4 +1,4 @@
-package org.Akhil.common.config.security;
+package org.Akhil.common.config.security.config;
 
 import org.Akhil.common.model.UserRequestContext;
 import org.springframework.context.annotation.Bean;
@@ -9,5 +9,10 @@ public class Config {
     @Bean
     public UserRequestContext userRequestContext(){
         return  new UserRequestContext();
+    }
+
+    @Bean
+    public FeignClientConfig feignClientConfig(){
+        return new FeignClientConfig();
     }
 }
