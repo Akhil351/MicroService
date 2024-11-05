@@ -2,7 +2,6 @@ package org.Akhil.common.config.security;
 
 import org.Akhil.common.config.jwt.JwtFilter;
 import org.Akhil.common.config.userDetails.CustomerDetailsService;
-import org.Akhil.common.model.UserRequestContext;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,11 +35,6 @@ public class SecurityConfig {
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();
-    }
-
-    @Bean
-    public UserRequestContext userRequestContext(){
-      return  new UserRequestContext();
     }
 
     @Bean
