@@ -2,12 +2,10 @@ package org.Akhil.cart.controller;
 
 import org.Akhil.cart.service.CartItemService;
 import org.Akhil.cart.service.CartService;
-import org.Akhil.common.config.userDetails.CustomerDetails;
+import org.Akhil.common.model.UserRequestContext;
 import org.Akhil.common.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,13 +24,13 @@ public class CartItemController {
 
     @Autowired
     private CartService cartService;
+    @Autowired
+    private UserRequestContext context;
 
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long productId,@RequestParam Integer quantity){
-               Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-               CustomerDetails userDetails=(CustomerDetails) authentication.getPrincipal();
-               cartItemService.addItemToCart(userDetails.getId(),productId,quantity);
+               cartItemService.addItemToCart(context.getUserId(),productId,quantity);
                return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart added").build());
     }
     @DeleteMapping("/cartItem/{productId}/remove")

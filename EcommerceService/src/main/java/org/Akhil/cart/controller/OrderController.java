@@ -1,13 +1,11 @@
 package org.Akhil.cart.controller;
 
 import org.Akhil.cart.service.OrderService;
-import org.Akhil.common.config.userDetails.CustomerDetails;
 import org.Akhil.common.dto.OrderDto;
+import org.Akhil.common.model.UserRequestContext;
 import org.Akhil.common.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +19,11 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserRequestContext context;
     @PostMapping("/order")
     public ResponseEntity<ApiResponse> createOrder(){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        CustomerDetails userDetails=(CustomerDetails) authentication.getPrincipal();
-        OrderDto order=orderService.placeOrder(userDetails.getId());
+        OrderDto order=orderService.placeOrder(context.getUserId());
         return ResponseEntity.ok(ApiResponse.builder().status("Success").data(order).build());
     }
 
@@ -38,9 +36,7 @@ public class OrderController {
 
     @GetMapping("/getOrders")
     public ResponseEntity<ApiResponse> getOrderByUserId(){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        CustomerDetails userDetails=(CustomerDetails) authentication.getPrincipal();
-        List<OrderDto> orders=orderService.getUserOrders(userDetails.getId());
+        List<OrderDto> orders=orderService.getUserOrders(context.getUserId());
         return ResponseEntity.ok(ApiResponse.builder().status("Success").data(orders).build());
     }
 }
