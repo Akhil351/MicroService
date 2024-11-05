@@ -4,17 +4,21 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import org.Akhil.common.config.userDetails.CustomerDetails;
 import org.Akhil.common.config.userDetails.CustomerDetailsService;
+import org.Akhil.common.model.UserRequestContext;
 import org.Akhil.common.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class JwtFilter extends OncePerRequestFilter {
@@ -22,6 +26,8 @@ public class JwtFilter extends OncePerRequestFilter {
     private JwtService jwtService;
     @Autowired
     private CustomerDetailsService customerDetailsService;
+    @Autowired
+    private UserRequestContext context;
 
     protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain filterChain) throws ServletException, IOException {
         String jwtToken=this.parseJwt(request);
@@ -29,9 +35,10 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 if(jwtService.validateToken(jwtToken)){
                     String email=jwtService.getEmail(jwtToken);
-                    UserDetails userDetails=customerDetailsService.loadUserByUsername(email);
+                    CustomerDetails userDetails=(CustomerDetails) customerDetailsService.loadUserByUsername(email);
                     if(userDetails!=null){
                         Authentication authentication=new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(),userDetails.getAuthorities());
+                        setContext(userDetails);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                     else{
@@ -62,6 +69,15 @@ public class JwtFilter extends OncePerRequestFilter {
             return header.substring(7);
         }
         return null;
+    }
+
+    private void setContext(CustomerDetails customerDetails){
+        context.setAuthorities(getAuthorities(customerDetails.getAuthorities()));
+        context.setUserEmail(customerDetails.getEmail());
+        context.setUserId(customerDetails.getId());
+    }
+    private List<String> getAuthorities(Collection<? extends GrantedAuthority> authorities){
+        return authorities.stream().map(GrantedAuthority::getAuthority).toList();
     }
 }
 
