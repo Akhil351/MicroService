@@ -8,9 +8,9 @@ import java.util.Map;
 
 public interface ProductService {
     Product addProduct(ProductDto productDto);
-    Product getProductById(Long id);
-    void deleteProductById(Long id);
-    Product updateProduct(ProductDto productDto,Long productId);
+    Product getProductById(String id);
+    void deleteProductById(String id);
+    Product updateProduct(ProductDto productDto,String productId);
     Long countProductsByBrandAndName(String brand,String name);
     ProductDto convertToDto(Product product);
     List<ProductDto> getConvertedProducts(List<Product> products);

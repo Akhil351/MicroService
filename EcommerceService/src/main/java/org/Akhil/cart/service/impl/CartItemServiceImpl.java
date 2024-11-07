@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 
 @Service
@@ -29,11 +30,12 @@ public class CartItemServiceImpl implements CartItemService {
     @Autowired
     private ProductClient productClient;
     @Override
-    public void addItemToCart(String userId, Long productId, int quantity) {
+    public void addItemToCart(String userId, String productId, int quantity) {
         Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
         Product product=productClient.getProductById(productId);
         CartItem cartItem=cartItemRepo.findByCartIdAndProductId(cart.getId(),productId).orElse(new CartItem());
         if(ObjectUtils.isEmpty(cartItem.getId())){
+            cartItem.setId("cartItem"+ UUID.randomUUID().toString());
             cartItem.setCartId(cart.getId());
             cartItem.setProductId(productId);
             cartItem.setQuantity(quantity);
@@ -49,7 +51,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void removeItemFromCart(String userId, Long productId) {
+    public void removeItemFromCart(String userId, String productId) {
            Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
            CartItem cartItemToRemove=this.getCartItem(cart.getId(),productId);
            cartItemToRemove.setCartId(null);
@@ -59,7 +61,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void updateItemQuantity(String userId, Long productId, int quantity) {
+    public void updateItemQuantity(String userId, String productId, int quantity) {
         Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
         CartItem cartItem=this.getCartItem(cart.getId(),productId);
         cartItem.setQuantity(quantity);
@@ -70,7 +72,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItem getCartItem(Long cartId, Long productId) {
+    public CartItem getCartItem(String cartId, String productId) {
        return cartItemRepo.findByCartIdAndProductId(cartId,productId).orElseThrow(()->new ResourceNotFoundException("Item Not Found"));
     }
 

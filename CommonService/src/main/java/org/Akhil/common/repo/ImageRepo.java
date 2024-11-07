@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ImageRepo extends JpaRepository<Image,Long> {
-    List<Image> findByProductId(Long productId);
-    void deleteAllByProductId(Long productId );
+public interface ImageRepo extends JpaRepository<Image,String> {
+    List<Image> findByProductId(String productId);
+    void deleteAllByProductId(String productId);
 }

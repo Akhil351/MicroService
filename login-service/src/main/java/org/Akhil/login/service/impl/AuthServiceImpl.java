@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User createUser(UserRequest user) {
         userRepo.findByEmail(user.getEmail()).ifPresent((u)->{throw new UserAlreadyExist("user with email "+user.getEmail()+ " already exist");});
-        String userId="u"+UUID.randomUUID().toString();
+        String userId="user"+UUID.randomUUID().toString();
         try{
             cartClient.initializeNewCart(userId);
             List<Integer> roles;
@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
     }
     private void saveRole(List<Integer> roles,String userId){
       roles.stream().map(role->Roles.builder()
-              .id(UUID.randomUUID().toString())
+              .id("role"+UUID.randomUUID().toString())
               .role(role)
               .userId(userId)
               .build())

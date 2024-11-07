@@ -1,10 +1,11 @@
 package org.Akhil.common.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -15,14 +16,13 @@ import java.math.BigDecimal;
 @Builder
 public class CartItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private Integer quantity;
     @Builder.Default
     private BigDecimal unitPrice=BigDecimal.ZERO;
     private BigDecimal totalPrice;
-    private Long productId;
-    private Long cartId;
+    private String productId;
+    private String cartId;
     public void setTotalPrice(){
         this.totalPrice=unitPrice.multiply(new BigDecimal(quantity));
     }

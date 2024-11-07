@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -19,7 +20,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private ProductRepo productRepo;
     @Override
-    public Category getCategoryById(Long id) {
+    public Category getCategoryById(String id) {
         return categoryRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Category Not Found"));
     }
 
@@ -36,13 +37,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category addCategory(Category category) {
         categoryRepo.findByName(category.getName())
-                .ifPresentOrElse(categoryRepo::save,()->{throw new AlreadyExistException("This Category Already Present");
+                .ifPresent(existingCategory->{
+                    throw new AlreadyExistException("Category Already Present");
                 });
-        return category;
+        category.setId("cat"+ UUID.randomUUID().toString());
+        return categoryRepo.save(category);
     }
 
     @Override
-    public Category updateCategory(Category category, Long id) {
+    public Category updateCategory(Category category, String id) {
         return categoryRepo.findById(id)
                 .map(existingCategory->this.updateExistingCategory(existingCategory,category))
                 .map(categoryRepo::save)
@@ -54,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
         return existingCategory;
     }
     @Override
-    public void deleteCategoryById(Long id) {
+    public void deleteCategoryById(String id) {
          categoryRepo.findById(id).ifPresentOrElse(categoryRepo::delete,()->{throw new ResourceNotFoundException("Category Not Found");});
          productRepo.deleteAllByCategoryId(id);
     }

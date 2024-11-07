@@ -40,7 +40,7 @@ public class CategoryController {
     }
 
     @GetMapping("/getCategoryById/{id}")
-    public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse> getCategoryById(@PathVariable String id){
             Category theCategory=categoryService.getCategoryById(id);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").data(theCategory).build());
     }
@@ -53,20 +53,20 @@ public class CategoryController {
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id){
+    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable String id){
             categoryService.deleteCategoryById(id);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").data(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id,@RequestBody Category category){
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable String id,@RequestBody Category category){
             Category theCategory=categoryService.updateCategory(category,id);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").data(theCategory).build());
     }
 
     @GetMapping("/categoryName/{id}")
-    public ResponseEntity<String> categoryName(@PathVariable Long id){
+    public ResponseEntity<String> categoryName(@PathVariable String id){
             Category theCategory=categoryService.getCategoryById(id);
             return ResponseEntity.ok(theCategory.getName());
     }

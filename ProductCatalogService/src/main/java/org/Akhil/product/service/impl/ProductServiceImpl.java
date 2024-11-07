@@ -10,8 +10,11 @@ import org.Akhil.common.repo.CategoryRepo;
 import org.Akhil.common.repo.ImageRepo;
 import org.Akhil.common.repo.ProductRepo;
 import org.Akhil.common.specification.SpecificationBuilder;
+import org.Akhil.common.util.Utils;
 import org.Akhil.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -20,6 +23,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -39,12 +43,13 @@ public class ProductServiceImpl implements ProductService {
     private Category getCategory(String categoryName){
         return  categoryRepo.findByName(categoryName)
                 .orElseGet(()->{
-                    Category newCategory=Category.builder().name(categoryName).build();
+                    Category newCategory=Category.builder().id("cat"+ UUID.randomUUID().toString()).name(categoryName).build();
                     return categoryRepo.save(newCategory);
                 });
     }
-    private Product createProduct(ProductDto productDto,Long categoryId){
+    private Product createProduct(ProductDto productDto,String categoryId){
         return Product.builder()
+                .id("pro"+UUID.randomUUID().toString())
                 .name(productDto.getName())
                 .brand(productDto.getBrand())
                 .price(productDto.getPrice())
@@ -55,18 +60,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(String id) {
         return productRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Product Not Found"));
     }
 
     @Override
-    public void deleteProductById(Long id) {
+    public void deleteProductById(String id) {
         productRepo.findById(id).ifPresentOrElse(productRepo::delete,()->{throw new ResourceNotFoundException("Product Not Found");});
         imageRepo.deleteAllByProductId(id);
     }
 
     @Override
-    public Product updateProduct(ProductDto productDto, Long productId) {
+    public Product updateProduct(ProductDto productDto, String productId) {
         return productRepo.findById(productId)
                 .map(existingProduct->this.updateExistingProduct(existingProduct,productDto))
                 .map(productRepo::save)
@@ -108,8 +113,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> searchKey(Map<String, Object> params) {
-        if(ObjectUtils.isEmpty(params.get("searchKey"))) return productRepo.findAll();
-        Object searchKey=params.get("searchKey");
+        int pageNo=(ObjectUtils.isEmpty(params.get(Utils.PAGE_NO)))?0:Integer.parseInt(params.get(Utils.PAGE_NO).toString());
+        int pageSize=(ObjectUtils.isEmpty(params.get(Utils.PAGE_SIZE)))?5:Integer.parseInt(params.get(Utils.PAGE_SIZE).toString());
+        Sort sort=Sort.by(Sort.Order.asc("id"));
+        PageRequest pageRequest=PageRequest.of(pageNo,pageSize,sort);
+        if(ObjectUtils.isEmpty(params.get(Utils.SEARCH_KEY))){
+            return productRepo.findAll(pageRequest).getContent();
+        }
+        Object searchKey=params.get(Utils.SEARCH_KEY);
         SpecificationBuilder<Product> specificationBuilder=new SpecificationBuilder<>();
         Specification<Product> spec=null;
         Specification<Product> spec2;
@@ -122,6 +133,6 @@ public class ProductServiceImpl implements ProductService {
                                    .or(specificationBuilder.contains("brand",searchKey))
                                    .or(specificationBuilder.contains("description",searchKey));
         spec=(spec!=null)?spec.or(spec2):spec2;
-        return productRepo.findAll(spec);
+        return productRepo.findAll(spec,pageRequest).getContent();
     }
 }

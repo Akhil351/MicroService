@@ -27,21 +27,21 @@ public class ImageController {
     private ImageService imageService;
     @PreAuthorize("@securityValidate.isAdmin()")
     @PostMapping("/upload/{productId}")
-    public ResponseEntity<ApiResponse> saveImage(@RequestParam List<MultipartFile>files, @PathVariable Long productId){
+    public ResponseEntity<ApiResponse> saveImage(@RequestParam List<MultipartFile>files, @PathVariable String productId){
             List<ImageDto> images=imageService.saveImage(files,productId);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(images).error(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @PutMapping("/update/{imageId}")
-    public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId,@RequestParam MultipartFile file){
+    public ResponseEntity<ApiResponse> updateImage(@PathVariable String imageId,@RequestParam MultipartFile file){
             imageService.updateImage(file,imageId);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data("image updated").error(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @DeleteMapping("/deleteImage/{imageId}")
-    public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId){
+    public ResponseEntity<ApiResponse> deleteImage(@PathVariable String imageId){
             imageService.deleteImageById(imageId);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data("image deleted").error(null).build());
     }

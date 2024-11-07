@@ -28,7 +28,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/getProductById/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId){
+    public ResponseEntity<Product> getProductById(@PathVariable("id") String productId){
             Product product=productService.getProductById(productId);
             return ResponseEntity.ok(product);
     }
@@ -42,14 +42,14 @@ public class ProductController {
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @PutMapping("/update/{productId}")
-    public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductDto productDto,@PathVariable Long productId){
+    public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductDto productDto,@PathVariable String productId){
             ProductDto product=productService.convertToDto(productService.updateProduct(productDto,productId));
             return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(product).error(null).build());
     }
 
     @PreAuthorize("@securityValidate.isAdmin()")
     @DeleteMapping("/delete/{productId}")
-    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId){
+    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable String productId){
             productService.deleteProductById(productId);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data("product deleted").error(null).build());
     }

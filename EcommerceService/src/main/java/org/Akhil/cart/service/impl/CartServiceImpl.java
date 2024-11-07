@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -28,7 +29,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private ProductClient productClient;
     @Override
-    public Cart getCart(Long id) {
+    public Cart getCart(String id) {
         return cartRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Cart Not Found"));
     }
 
@@ -47,8 +48,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Long initializeNewCart(String userId) {
+    public String initializeNewCart(String userId) {
         Cart cart=new Cart();
+        cart.setId("cart"+ UUID.randomUUID().toString());
         cart.setUserId(userId);
         return cartRepo.save(cart).getId();
     }
@@ -71,7 +73,7 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
-    public void clearCart(Long cartId) {
+    public void clearCart(String cartId) {
         Cart cart=cartRepo.findById(cartId).orElseThrow(()->new ResourceNotFoundException("Cart Not found"));
         cart.setTotalAmount(BigDecimal.ZERO);
         cartItemRepo.deleteAllByCartId(cart.getId());

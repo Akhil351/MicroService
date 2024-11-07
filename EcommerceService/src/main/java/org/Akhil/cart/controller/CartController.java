@@ -37,7 +37,7 @@ public class CartController {
     }
 
     @PostMapping("/initializeNewCart")
-    public Long initializeNewCart(@RequestParam String userId){
+    public String initializeNewCart(@RequestParam String userId){
         return cartService.initializeNewCart(userId);
     }
 

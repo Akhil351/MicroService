@@ -29,18 +29,18 @@ public class CartItemController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long productId,@RequestParam Integer quantity){
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam String productId,@RequestParam Integer quantity){
                cartItemService.addItemToCart(context.getUserId(),productId,quantity);
                return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart added").build());
     }
     @DeleteMapping("/cartItem/{productId}/remove")
-    public ResponseEntity<ApiResponse> removeFromCart(@PathVariable Long productId){
+    public ResponseEntity<ApiResponse> removeFromCart(@PathVariable String productId){
             cartItemService.removeItemFromCart(context.getUserId(),productId);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart removed").build());
     }
 
     @PutMapping("/cartItem/{productId}/update")
-    public ResponseEntity<ApiResponse> updateCart(@PathVariable Long productId,@RequestParam Integer quantity){
+    public ResponseEntity<ApiResponse> updateCart(@PathVariable String productId,@RequestParam Integer quantity){
             cartItemService.updateItemQuantity(context.getUserId(),productId,quantity);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart updated").build());
     }
