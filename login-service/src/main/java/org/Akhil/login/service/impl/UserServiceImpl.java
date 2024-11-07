@@ -8,9 +8,12 @@ import org.Akhil.common.model.User;
 import org.Akhil.common.repo.RolesRepo;
 import org.Akhil.common.repo.UserRepo;
 import org.Akhil.common.request.UpdateUserRequest;
+import org.Akhil.common.util.Utils;
 import org.Akhil.login.service.CartClient;
 import org.Akhil.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -60,8 +63,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers(Map<String,String> params) {
-        if(ObjectUtils.isEmpty(params.get("searchKey"))) return userRepo.findAll().stream().map(this::convertToDto).toList();
+    public List<UserDto> getAllUsers(Map<String,Object> params) {
+        int pageNo=(ObjectUtils.isEmpty(params.get(Utils.PAGE_NO)))?0:Integer.parseInt(params.get(Utils.PAGE_NO).toString());
+        int pageSize=(ObjectUtils.isEmpty(params.get(Utils.PAGE_SIZE)))?5:Integer.parseInt(params.get(Utils.PAGE_SIZE).toString());
+        Sort sort=Sort.by(Sort.Order.asc("name"));
+        PageRequest pageRequest=PageRequest.of(pageNo,pageSize,sort);
+        if(ObjectUtils.isEmpty(params.get("searchKey"))){
+            return userRepo.findAll(pageRequest).stream().map(this::convertToDto).toList();
+        }
         Object searchKey=params.get("searchKey");
         Query query = new Query();
         query.addCriteria(
@@ -73,6 +82,7 @@ public class UserServiceImpl implements UserService {
                         Criteria.where("phoneNumber").regex(searchKey.toString(), "i")
                 )
         );
+        query.skip(pageNo*pageSize).limit(pageSize);
         return mongoTemplate.find(query,User.class).stream().map(this::convertToDto).toList();
     }
 

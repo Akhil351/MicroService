@@ -11,7 +11,7 @@ import java.util.Map;
 public interface UserService {
     User updateUser(UpdateUserRequest user, String userId);
     void deleteUser(String userId);
-    List<UserDto> getAllUsers(Map<String,String> params);
+    List<UserDto> getAllUsers(Map<String,Object> params);
     UserDto userProfile(String userId);
     BigDecimal getCartBalance();
 }

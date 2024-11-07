@@ -4,6 +4,7 @@ import feign.FeignException;
 import org.Akhil.common.config.jwt.JwtService;
 import org.Akhil.common.config.userDetails.CustomerDetailsService;
 import org.Akhil.common.enums.Role;
+import org.Akhil.common.exception.AlreadyExistException;
 import org.Akhil.common.exception.InvalidCredential;
 import org.Akhil.common.exception.UserAlreadyExist;
 import org.Akhil.common.model.Roles;
@@ -43,6 +44,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User createUser(UserRequest user) {
         userRepo.findByEmail(user.getEmail()).ifPresent((u)->{throw new UserAlreadyExist("user with email "+user.getEmail()+ " already exist");});
+        userRepo.findByPhoneNumber(user.getPhoneNumber()).ifPresent(u->{throw new AlreadyExistException("user with phoneNumber"+user.getPhoneNumber()+" already exist");
+        });
         String userId="user"+UUID.randomUUID().toString();
         try{
             cartClient.initializeNewCart(userId);
