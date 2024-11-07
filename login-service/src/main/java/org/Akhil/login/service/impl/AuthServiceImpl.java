@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User createUser(UserRequest user) {
         userRepo.findByEmail(user.getEmail()).ifPresent((u)->{throw new UserAlreadyExist("user with email "+user.getEmail()+ " already exist");});
-        userRepo.findByPhoneNumber(user.getPhoneNumber()).ifPresent(u->{throw new AlreadyExistException("user with phoneNumber"+user.getPhoneNumber()+" already exist");
+        userRepo.findByPhoneNumber(user.getPhoneNumber()).ifPresent(u->{throw new AlreadyExistException("user with phoneNumber "+user.getPhoneNumber()+" already exist");
         });
         String userId="user"+UUID.randomUUID().toString();
         try{

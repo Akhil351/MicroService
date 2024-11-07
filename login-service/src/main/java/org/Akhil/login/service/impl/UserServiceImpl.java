@@ -64,12 +64,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers(Map<String,Object> params) {
-        int pageNo=(ObjectUtils.isEmpty(params.get(Utils.PAGE_NO)))?0:Integer.parseInt(params.get(Utils.PAGE_NO).toString());
-        int pageSize=(ObjectUtils.isEmpty(params.get(Utils.PAGE_SIZE)))?5:Integer.parseInt(params.get(Utils.PAGE_SIZE).toString());
-        Sort sort=Sort.by(Sort.Order.asc("name"));
-        PageRequest pageRequest=PageRequest.of(pageNo,pageSize,sort);
         if(ObjectUtils.isEmpty(params.get("searchKey"))){
-            return userRepo.findAll(pageRequest).stream().map(this::convertToDto).toList();
+            return userRepo.findAll().stream().map(this::convertToDto).toList();
         }
         Object searchKey=params.get("searchKey");
         Query query = new Query();
@@ -82,7 +78,6 @@ public class UserServiceImpl implements UserService {
                         Criteria.where("phoneNumber").regex(searchKey.toString(), "i")
                 )
         );
-        query.skip(pageNo*pageSize).limit(pageSize);
         return mongoTemplate.find(query,User.class).stream().map(this::convertToDto).toList();
     }
 
