@@ -61,6 +61,11 @@ public class GlobalException {
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.INTERNAL_SERVER_ERROR.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
     }
 
+    @ExceptionHandler(InSufficientException.class)
+    public ResponseEntity<ApiResponse> outOfStock(InSufficientException exception){
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.INTERNAL_SERVER_ERROR.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
+    }
+
     @ExceptionHandler(CartException.class)
     public ResponseEntity<ApiResponse> cartException(CartException exception){
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ApiResponse.builder().status("Failed").data(null).error(ErrorResponse.builder().errorCode(ErrorCode.INTERNAL_SERVER_ERROR.getErrorCode()).errorDescription(exception.getMessage()).build()).build());
