@@ -44,7 +44,7 @@ public class ImageServiceImpl implements ImageService {
     private Image saveImage(MultipartFile file,String productId){
         try{
             Image image=Image.builder()
-                    .id("image"+UUID.randomUUID().toString())
+                    .id("im"+UUID.randomUUID().toString())
                     .fileName(file.getOriginalFilename())
                     .fileType(file.getContentType())
                     .image(new SerialBlob(file.getBytes()))

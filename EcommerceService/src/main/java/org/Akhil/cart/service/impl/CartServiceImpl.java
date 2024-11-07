@@ -50,7 +50,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public String initializeNewCart(String userId) {
         Cart cart=new Cart();
-        cart.setId("cart"+ UUID.randomUUID().toString());
+        cart.setId("ca"+ UUID.randomUUID().toString());
         cart.setUserId(userId);
         return cartRepo.save(cart).getId();
     }

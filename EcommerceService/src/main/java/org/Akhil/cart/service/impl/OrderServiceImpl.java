@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
     }
     private Order createOrder(Cart cart){
         return   Order.builder()
-                .orderId("order"+UUID.randomUUID().toString())
+                .orderId("or"+UUID.randomUUID().toString())
                 .orderDate(LocalDate.now())
                 .orderStatus(OrderStatus.code("Delivered"))
                 .userId(cart.getUserId())
@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
             Product product=productClient.getProductById(item.getProductId());
             product.setInventory(product.getInventory()-item.getQuantity());
             productRepo.save(product);
-            return OrderItem.builder().id("orderItem"+UUID.randomUUID()).orderId(orderId)
+            return OrderItem.builder().id("oi"+UUID.randomUUID()).orderId(orderId)
                     .productId(product.getId())
                     .quantity(item.getQuantity())
                     .unitPrice(item.getUnitPrice())

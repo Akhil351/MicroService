@@ -35,7 +35,7 @@ public class CartItemServiceImpl implements CartItemService {
         Product product=productClient.getProductById(productId);
         CartItem cartItem=cartItemRepo.findByCartIdAndProductId(cart.getId(),productId).orElse(new CartItem());
         if(ObjectUtils.isEmpty(cartItem.getId())){
-            cartItem.setId("cartItem"+ UUID.randomUUID().toString());
+            cartItem.setId("ci"+ UUID.randomUUID().toString());
             cartItem.setCartId(cart.getId());
             cartItem.setProductId(productId);
             cartItem.setQuantity(quantity);
