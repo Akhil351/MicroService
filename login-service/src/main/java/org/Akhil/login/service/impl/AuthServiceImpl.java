@@ -1,6 +1,5 @@
 package org.Akhil.login.service.impl;
 
-import feign.FeignException;
 import org.Akhil.common.config.jwt.JwtService;
 import org.Akhil.common.config.userDetails.CustomerDetailsService;
 import org.Akhil.common.enums.Role;
@@ -14,8 +13,14 @@ import org.Akhil.common.repo.UserRepo;
 import org.Akhil.common.request.UserRequest;
 import org.Akhil.login.request.LoginRequest;
 import org.Akhil.login.service.AuthService;
-import org.Akhil.login.service.CartClient;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,15 +45,21 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtService jwtService;
     @Autowired
-    private CartClient cartClient;
+    private NewTopic topic;
+    @Autowired
+    private KafkaTemplate<String,String> template;
+
+    private static final Logger logger= LoggerFactory.getLogger(AuthServiceImpl.class);
+
     @Override
     public User createUser(UserRequest user) {
         userRepo.findByEmail(user.getEmail()).ifPresent((u)->{throw new UserAlreadyExist("user with email "+user.getEmail()+ " already exist");});
         userRepo.findByPhoneNumber(user.getPhoneNumber()).ifPresent(u->{throw new AlreadyExistException("user with phoneNumber "+user.getPhoneNumber()+" already exist");
         });
         String userId="user"+UUID.randomUUID().toString();
-        try{
-            cartClient.initializeNewCart(userId);
+        logger.info("userId:{}", userId);
+        Message<String> message= MessageBuilder.withPayload(userId).setHeader(KafkaHeaders.TOPIC,topic.name()).build();
+        template.send(message);
             List<Integer> roles;
             if(ObjectUtils.isEmpty(user.getRole())) roles=List.of(101);
             else roles=user.getRole().stream().map(Role::code).toList();
@@ -62,11 +73,6 @@ public class AuthServiceImpl implements AuthService {
                     .build());
             saveRole(roles,theUser.getId());
             return theUser;
-        }
-        catch (FeignException e){
-            System.out.println("server is down");
-            throw  e;
-        }
     }
     private void saveRole(List<Integer> roles,String userId){
       roles.stream().map(role->Roles.builder()

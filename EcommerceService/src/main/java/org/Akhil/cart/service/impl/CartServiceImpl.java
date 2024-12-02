@@ -12,7 +12,10 @@ import org.Akhil.common.model.CartItem;
 import org.Akhil.common.model.Product;
 import org.Akhil.common.repo.CartItemRepo;
 import org.Akhil.common.repo.CartRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,6 +31,8 @@ public class CartServiceImpl implements CartService {
     private Converter converter;
     @Autowired
     private ProductClient productClient;
+
+    private static final Logger logger= LoggerFactory.getLogger(CartServiceImpl.class);
     @Override
     public Cart getCart(String id) {
         return cartRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Cart Not Found"));
@@ -53,6 +58,15 @@ public class CartServiceImpl implements CartService {
         cart.setId("ca"+ UUID.randomUUID().toString());
         cart.setUserId(userId);
         return cartRepo.save(cart).getId();
+    }
+
+    @KafkaListener(topics = "${spring.kafka.topic.name}",groupId = "${spring.kafka.consumer.group-id}")
+    public void createCart(String userId){
+        logger.info("userId:{}", userId);
+        Cart cart=new Cart();
+        cart.setId("ca"+ UUID.randomUUID().toString());
+        cart.setUserId(userId);
+        cartRepo.save(cart);
     }
 
     @Override
