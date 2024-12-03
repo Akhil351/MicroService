@@ -9,7 +9,6 @@ public interface CartService {
     Cart getCart(String id);
     void deleteCart(String userId);
     BigDecimal getTotalPrice(String userId);
-    String initializeNewCart(String userId);
     Cart getCartByUserId(String userId);
     void clearCart(String cartId);
     CartDto displayCurrentUserCart(String userId);

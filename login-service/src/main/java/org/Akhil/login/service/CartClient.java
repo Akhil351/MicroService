@@ -11,9 +11,6 @@ import java.math.BigDecimal;
 
 @FeignClient(name = "ECOMMERCE-SERVICE",url = "http://localhost:9003")
 public interface CartClient {
-    @PostMapping("/api/v2/carts/initializeNewCart")
-    public void initializeNewCart(@RequestParam String userId);
-
     @DeleteMapping("/api/v2/carts/{userId}/clear")
     public void deleteCart(@PathVariable String userId);
 

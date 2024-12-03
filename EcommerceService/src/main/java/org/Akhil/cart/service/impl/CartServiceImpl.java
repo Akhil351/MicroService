@@ -52,14 +52,6 @@ public class CartServiceImpl implements CartService {
         return cart.getTotalAmount();
     }
 
-    @Override
-    public String initializeNewCart(String userId) {
-        Cart cart=new Cart();
-        cart.setId("ca"+ UUID.randomUUID().toString());
-        cart.setUserId(userId);
-        return cartRepo.save(cart).getId();
-    }
-
     @KafkaListener(topics = "${spring.kafka.topic.name}",groupId = "${spring.kafka.consumer.group-id}")
     public void createCart(String userId){
         logger.info("userId:{}", userId);

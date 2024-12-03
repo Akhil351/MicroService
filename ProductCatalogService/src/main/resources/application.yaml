@@ -9,4 +9,19 @@ spring:
   profiles:
     active: db,mongo,server
 
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: product
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+    topic1:
+      name: order-topic
+
 

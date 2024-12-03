@@ -36,10 +36,6 @@ public class CartController {
         return cartService.getTotalPrice(context.getUserId());
     }
 
-    @PostMapping("/initializeNewCart")
-    public String initializeNewCart(@RequestParam String userId){
-        return cartService.initializeNewCart(userId);
-    }
 
     @DeleteMapping("/{userId}/clear")
     public ResponseEntity<ApiResponse> deleteCart(@PathVariable String userId){

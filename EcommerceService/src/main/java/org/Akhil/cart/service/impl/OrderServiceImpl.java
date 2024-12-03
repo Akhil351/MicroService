@@ -18,7 +18,9 @@ import org.Akhil.common.repo.CartItemRepo;
 import org.Akhil.common.repo.OrderItemRepo;
 import org.Akhil.common.repo.OrderRepo;
 import org.Akhil.common.repo.ProductRepo;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -41,6 +43,10 @@ public class OrderServiceImpl implements OrderService {
     private ProductClient productClient;
     @Autowired
     private ProductRepo productRepo;
+    @Autowired
+    private NewTopic topic;
+    @Autowired
+    private KafkaTemplate<String,OrderItem> template;
 
     @Transactional
     @Override
@@ -67,15 +73,14 @@ public class OrderServiceImpl implements OrderService {
     }
     private List<OrderItem> createOrderItems(String orderId,String cartId){
         return  cartItemRepo.findByCartId(cartId).stream().map(item->{
-            Product product=productClient.getProductById(item.getProductId());
-            product.setInventory(product.getInventory()-item.getQuantity());
-            productRepo.save(product);
-            return OrderItem.builder().id("oi"+UUID.randomUUID()).orderId(orderId)
-                    .productId(product.getId())
+            OrderItem orderItem= OrderItem.builder().id("oi"+UUID.randomUUID()).orderId(orderId)
+                    .productId(item.getProductId())
                     .quantity(item.getQuantity())
                     .unitPrice(item.getUnitPrice())
                     .totalPrice(item.getTotalPrice())
                     .build();
+            template.send(topic.name(),orderItem);
+            return orderItem;
         }).toList();
     }
 

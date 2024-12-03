@@ -5,6 +5,7 @@ import org.Akhil.common.dto.ProductDto;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.mapper.Converter;
 import org.Akhil.common.model.Category;
+import org.Akhil.common.model.OrderItem;
 import org.Akhil.common.model.Product;
 import org.Akhil.common.repo.CategoryRepo;
 import org.Akhil.common.repo.ImageRepo;
@@ -12,10 +13,13 @@ import org.Akhil.common.repo.ProductRepo;
 import org.Akhil.common.specification.SpecificationBuilder;
 import org.Akhil.common.util.Utils;
 import org.Akhil.product.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -35,6 +39,9 @@ public class ProductServiceImpl implements ProductService {
     private ImageRepo imageRepo;
     @Autowired
     private Converter converter;
+
+    private static final Logger logger= LoggerFactory.getLogger(ProductServiceImpl.class);
+
     @Override
     public Product addProduct(ProductDto productDto) {
         Category category=this.getCategory(productDto.getCategory());
@@ -135,4 +142,14 @@ public class ProductServiceImpl implements ProductService {
         spec=(spec!=null)?spec.or(spec2):spec2;
         return productRepo.findAll(spec,pageRequest).getContent();
     }
+
+    @KafkaListener(topics = "${spring.kafka.topic1.name}",groupId = "${spring.kafka.consumer.group-id}")
+    public void updateQuantity(OrderItem orderItem){
+        logger.info("quantity updated");
+        Product product=this.getProductById(orderItem.getProductId());
+        product.setInventory(product.getInventory()-orderItem.getQuantity());
+        productRepo.save(product);
+    }
+
+
 }

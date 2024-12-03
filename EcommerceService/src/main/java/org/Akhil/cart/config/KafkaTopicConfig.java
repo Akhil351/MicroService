@@ -1,4 +1,4 @@
-package org.Akhil.login.config;
+package org.Akhil.cart.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +8,7 @@ import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
 public class KafkaTopicConfig {
-    @Value("${spring.kafka.topic.name}")
+    @Value("${spring.kafka.topic1.name}")
     private String topicName;
 
     @Bean

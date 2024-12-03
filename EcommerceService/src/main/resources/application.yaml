@@ -10,6 +10,10 @@ spring:
       - "optional:configserver:http://localhost:9009"
 
   kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       bootstrap-servers: localhost:9092
       group-id: cart
@@ -22,6 +26,8 @@ spring:
             trusted:
               packages: "*"
     topic:
-      name: cart-topic
+      name: create-topic
+    topic1:
+      name: order-topic
 
 
