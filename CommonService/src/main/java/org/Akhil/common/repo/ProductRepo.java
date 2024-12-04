@@ -14,8 +14,8 @@ import java.util.Optional;
 public interface ProductRepo extends JpaRepository<Product,String>, JpaSpecificationExecutor<Product> {
     Long countByBrandContainingAndNameContaining(String brand,String name);
     void deleteAllByCategoryId(String categoryId);
-    @Query(value = "SELECT p.price FROM Product p where p.id:=id",nativeQuery = false) // it works with entity and fields
+    @Query(value = "SELECT p.price FROM Product p where p.id=:id",nativeQuery = false) // it works with entity and fields
     Optional<BigDecimal> getPrice(@Param("id") String productId);
-    @Query(value = "SELECT p.name FROM Product p where p.id:=id",nativeQuery = false)
+    @Query(value = "SELECT p.name FROM Product p where p.id=:id",nativeQuery = false)
     Optional<String> getName(@Param("id") String productId);
 }

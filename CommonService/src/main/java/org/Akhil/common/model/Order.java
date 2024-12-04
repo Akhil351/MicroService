@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public class Order {
     @Id
     private String orderId;
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
     @Builder.Default
     private BigDecimal totalAmount=BigDecimal.ZERO;
     private Integer orderStatus;

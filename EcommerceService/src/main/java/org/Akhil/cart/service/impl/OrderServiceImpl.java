@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
     private Order createOrder(Cart cart){
         return   Order.builder()
                 .orderId("or"+UUID.randomUUID().toString())
-                .orderDate(LocalDate.now())
+                .orderDate(LocalDateTime.now())
                 .orderStatus(OrderStatus.code("Delivered"))
                 .userId(cart.getUserId())
                 .build();
