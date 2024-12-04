@@ -29,5 +29,7 @@ spring:
       name: create-topic
     topic1:
       name: order-topic
+    topic2:
+      name: delete-topic
 
 

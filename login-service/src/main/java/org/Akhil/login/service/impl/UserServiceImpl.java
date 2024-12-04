@@ -1,6 +1,5 @@
 package org.Akhil.login.service.impl;
 
-import feign.FeignException;
 import org.Akhil.common.dto.UserDto;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.mapper.Converter;
@@ -8,15 +7,14 @@ import org.Akhil.common.model.User;
 import org.Akhil.common.repo.RolesRepo;
 import org.Akhil.common.repo.UserRepo;
 import org.Akhil.common.request.UpdateUserRequest;
-import org.Akhil.common.util.Utils;
 import org.Akhil.login.service.CartClient;
 import org.Akhil.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -34,6 +32,10 @@ public class UserServiceImpl implements UserService {
     private Converter converter;
     @Autowired
     private CartClient cartClient;
+    @Value("${spring.kafka.topic1.name}")
+    private String topic1;
+    @Autowired
+    private KafkaTemplate<String,String> template;
     @Autowired
     private MongoTemplate mongoTemplate;
     @Override
@@ -51,15 +53,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String userId) {
-        try{
-            cartClient.deleteCart(userId);
+            template.send(topic1,userId);
             userRepo.findById(userId).ifPresentOrElse(userRepo::delete,()->{throw new ResourceNotFoundException("User Not Found");});
             rolesRepo.deleteAllByUserId(userId);
-        }
-        catch (FeignException e){
-            System.out.println("server is down");
-            throw e;
-        }
+
     }
 
     @Override

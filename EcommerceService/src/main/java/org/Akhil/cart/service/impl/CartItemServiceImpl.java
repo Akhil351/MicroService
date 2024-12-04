@@ -3,13 +3,12 @@ package org.Akhil.cart.service.impl;
 
 import org.Akhil.cart.service.CartItemService;
 import org.Akhil.cart.service.CartService;
-import org.Akhil.cart.service.ProductClient;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.model.Cart;
 import org.Akhil.common.model.CartItem;
-import org.Akhil.common.model.Product;
 import org.Akhil.common.repo.CartItemRepo;
 import org.Akhil.common.repo.CartRepo;
+import org.Akhil.common.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -26,20 +25,20 @@ public class CartItemServiceImpl implements CartItemService {
     private CartRepo cartRepo;
     @Autowired
     private CartService cartService;
-
     @Autowired
-    private ProductClient productClient;
+    private ProductRepo productRepo;
+
     @Override
     public void addItemToCart(String userId, String productId, int quantity) {
         Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
-        Product product=productClient.getProductById(productId);
         CartItem cartItem=cartItemRepo.findByCartIdAndProductId(cart.getId(),productId).orElse(new CartItem());
+        BigDecimal price=productRepo.getPrice(productId).orElseThrow(()->new ResourceNotFoundException("product not found"));
         if(ObjectUtils.isEmpty(cartItem.getId())){
             cartItem.setId("ci"+ UUID.randomUUID().toString());
             cartItem.setCartId(cart.getId());
             cartItem.setProductId(productId);
             cartItem.setQuantity(quantity);
-            cartItem.setUnitPrice(product.getPrice());
+            cartItem.setUnitPrice(price);
         }
         else{
             cartItem.setQuantity(cartItem.getQuantity()+quantity);

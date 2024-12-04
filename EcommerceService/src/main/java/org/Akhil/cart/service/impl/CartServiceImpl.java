@@ -2,16 +2,15 @@ package org.Akhil.cart.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.Akhil.cart.service.CartService;
-import org.Akhil.cart.service.ProductClient;
 import org.Akhil.common.dto.CartDto;
 import org.Akhil.common.dto.CartItemDto;
 import org.Akhil.common.exception.ResourceNotFoundException;
 import org.Akhil.common.mapper.Converter;
 import org.Akhil.common.model.Cart;
 import org.Akhil.common.model.CartItem;
-import org.Akhil.common.model.Product;
 import org.Akhil.common.repo.CartItemRepo;
 import org.Akhil.common.repo.CartRepo;
+import org.Akhil.common.repo.ProductRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private Converter converter;
     @Autowired
-    private ProductClient productClient;
+    private ProductRepo productRepo;
 
     private static final Logger logger= LoggerFactory.getLogger(CartServiceImpl.class);
     @Override
@@ -44,6 +43,11 @@ public class CartServiceImpl implements CartService {
         Cart cart=cartRepo.findByUserId(userId).orElseThrow(()->new ResourceNotFoundException("Cart Not Found"));
         cartItemRepo.deleteAllByCartId(cart.getId());
         cartRepo.delete(cart);
+    }
+    @KafkaListener(topics ="${spring.kafka.topic2.name}",groupId = "${spring.kafka.consumer.group-id}")
+    public void removeCart(String userId){
+        logger.info("deleting cart of the give user");
+        this.deleteCart(userId);
     }
 
     @Override
@@ -72,8 +76,8 @@ public class CartServiceImpl implements CartService {
     }
     private CartItemDto convertToCartItemDto(CartItem cartItem){
         CartItemDto cartItemDto= converter.convertToDto(cartItem, CartItemDto.class);
-        Product product=productClient.getProductById(cartItem.getProductId());
-        cartItemDto.setProductName(product.getName());
+        String productName=productRepo.getName(cartItem.getProductId()).orElseThrow(()->new ResourceNotFoundException("product not found"));
+        cartItemDto.setProductName(productName);
         return cartItemDto;
     }
 

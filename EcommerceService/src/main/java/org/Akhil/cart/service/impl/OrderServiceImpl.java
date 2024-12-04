@@ -3,7 +3,6 @@ package org.Akhil.cart.service.impl;
 import jakarta.transaction.Transactional;
 import org.Akhil.cart.service.CartService;
 import org.Akhil.cart.service.OrderService;
-import org.Akhil.cart.service.ProductClient;
 import org.Akhil.common.dto.OrderDto;
 import org.Akhil.common.dto.OrderItemDto;
 import org.Akhil.common.enums.OrderStatus;
@@ -13,7 +12,6 @@ import org.Akhil.common.mapper.Converter;
 import org.Akhil.common.model.Cart;
 import org.Akhil.common.model.Order;
 import org.Akhil.common.model.OrderItem;
-import org.Akhil.common.model.Product;
 import org.Akhil.common.repo.CartItemRepo;
 import org.Akhil.common.repo.OrderItemRepo;
 import org.Akhil.common.repo.OrderRepo;
@@ -39,8 +37,6 @@ public class OrderServiceImpl implements OrderService {
     private CartService cartService;
     @Autowired
     private CartItemRepo cartItemRepo;
-    @Autowired
-    private ProductClient productClient;
     @Autowired
     private ProductRepo productRepo;
     @Autowired
@@ -107,8 +103,8 @@ public class OrderServiceImpl implements OrderService {
     }
     private OrderItemDto convertToOrderDto(OrderItem orderItem){
         OrderItemDto orderItemDto=converter.convertToDto(orderItem,OrderItemDto.class);
-        Product product=productClient.getProductById(orderItem.getProductId());
-        orderItemDto.setProductName(product.getName());
+        String productName=productRepo.getName(orderItem.getProductId()).orElseThrow(()->new ResourceNotFoundException("product not found"));
+        orderItemDto.setProductName(productName);
         return orderItemDto;
     }
 

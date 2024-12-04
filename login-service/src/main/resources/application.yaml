@@ -17,3 +17,5 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     topic:
       name: create-topic
+    topic1:
+      name: delete-topic
