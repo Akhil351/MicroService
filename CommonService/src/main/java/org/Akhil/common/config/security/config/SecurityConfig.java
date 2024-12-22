@@ -1,8 +1,11 @@
 package org.Akhil.common.config.security.config;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
 import org.Akhil.common.config.jwt.JwtFilter;
 import org.Akhil.common.config.security.SecurityValidate;
 import org.Akhil.common.config.userDetails.CustomerDetailsService;
+import org.Akhil.common.util.JwtUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +19,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+
+import java.util.Collections;
+import java.util.List;
 
 
 @Configuration
@@ -59,9 +68,26 @@ public class SecurityConfig {
                                 ).authenticated()
                                 .anyRequest().permitAll()
                 )
+                .cors(cors->cors.configurationSource(corsConfigurationSource()))
               .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+        private CorsConfigurationSource corsConfigurationSource() {
+            return new CorsConfigurationSource() {
+                @Override
+                public CorsConfiguration getCorsConfiguration(@NonNull HttpServletRequest request) {
+                    CorsConfiguration cfg=new CorsConfiguration();
+                    cfg.setAllowedOrigins(List.of(JwtUtils.BASE_URL));
+                    cfg.setAllowedMethods(List.of("POST","GET","PUT","PATCH","DELETE"));
+                    cfg.setAllowCredentials(true);
+                    cfg.setAllowedHeaders(Collections.singletonList("*"));
+                    cfg.setExposedHeaders(List.of(JwtUtils.JWT_HEADER));
+                    cfg.setMaxAge(3600L);
+                    return cfg;
+                }
+            };
+        }
 //    @Bean
 //    public AuthenticationProvider authenticationProvider(){
 //        DaoAuthenticationProvider provider=new DaoAuthenticationProvider();

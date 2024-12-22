@@ -5,6 +5,7 @@ import org.Akhil.common.model.User;
 import org.Akhil.common.model.UserRequestContext;
 import org.Akhil.common.request.UpdateUserRequest;
 import org.Akhil.common.response.ApiResponse;
+import org.Akhil.common.util.JwtUtils;
 import org.Akhil.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,6 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v2/users")
+@CrossOrigin(JwtUtils.BASE_URL)
 public class UserController {
     @Autowired
     private UserService userService;

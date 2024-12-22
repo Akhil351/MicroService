@@ -3,6 +3,7 @@ package org.Akhil.product.controller;
 import org.Akhil.common.response.ApiResponse;
 import org.Akhil.common.dto.ProductDto;
 import org.Akhil.common.model.Product;
+import org.Akhil.common.util.JwtUtils;
 import org.Akhil.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v2/products")
+@CrossOrigin(JwtUtils.BASE_URL)
 public class ProductController {
     @Autowired
     private ProductService productService;
@@ -59,7 +62,7 @@ public class ProductController {
             Long count=productService.countProductsByBrandAndName(brandName,productName);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(count).error(null).build());
     }
-    @GetMapping("/allProducts")
+    @PostMapping("/allProducts")
     public ResponseEntity<ApiResponse> allProducts(@RequestBody Map<String,Object> params){
         List<ProductDto> products=productService.getConvertedProducts(productService.searchKey(params));
         return ResponseEntity.ok(ApiResponse.builder().status("Success").timeStamp(LocalDateTime.now()).data(products).error(null).build());

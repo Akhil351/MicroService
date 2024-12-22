@@ -4,6 +4,7 @@ import org.Akhil.cart.service.CartItemService;
 import org.Akhil.cart.service.CartService;
 import org.Akhil.common.model.UserRequestContext;
 import org.Akhil.common.response.ApiResponse;
+import org.Akhil.common.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 @RestController
 @RequestMapping("/api/v2/cartItems")
+@CrossOrigin(JwtUtils.BASE_URL)
 public class CartItemController {
     @Autowired
     private CartItemService cartItemService;
@@ -33,15 +35,15 @@ public class CartItemController {
                cartItemService.addItemToCart(context.getUserId(),productId,quantity);
                return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart added").build());
     }
-    @DeleteMapping("/cartItem/{productId}/remove")
-    public ResponseEntity<ApiResponse> removeFromCart(@PathVariable String productId){
-            cartItemService.removeItemFromCart(context.getUserId(),productId);
+    @DeleteMapping("/cartItem/{itemId}/remove")
+    public ResponseEntity<ApiResponse> removeFromCart(@PathVariable String itemId){
+            cartItemService.removeItemFromCart(context.getUserId(),itemId);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart removed").build());
     }
 
-    @PutMapping("/cartItem/{productId}/update")
-    public ResponseEntity<ApiResponse> updateCart(@PathVariable String productId,@RequestParam Integer quantity){
-            cartItemService.updateItemQuantity(context.getUserId(),productId,quantity);
+    @PutMapping("/cartItem/{itemId}/update")
+    public ResponseEntity<ApiResponse> updateCart(@PathVariable String itemId,@RequestParam Integer quantity){
+            cartItemService.updateItemQuantity(context.getUserId(),itemId,quantity);
             return ResponseEntity.ok(ApiResponse.builder().status("Success").data("cart updated").build());
     }
 }
