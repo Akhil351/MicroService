@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,6 +17,6 @@ public interface ProductRepo extends JpaRepository<Product,String>, JpaSpecifica
     void deleteAllByCategoryId(String categoryId);
     @Query(value = "SELECT p.price FROM Product p where p.id=:id",nativeQuery = false) // it works with entity and fields
     Optional<BigDecimal> getPrice(@Param("id") String productId);
-    @Query(value = "SELECT p.name FROM Product p where p.id=:id",nativeQuery = false)
-    Optional<String> getName(@Param("id") String productId);
+    @Query(value = "SELECT p.name,p.image FROM Product p where p.id=:id",nativeQuery = false)
+    Optional<List<Object[]>> getNameAndImage(@Param("id") String productId);
 }

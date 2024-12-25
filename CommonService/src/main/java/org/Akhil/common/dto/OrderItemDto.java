@@ -15,6 +15,7 @@ public class OrderItemDto {
     private String id;
     private String productName;
     private int quantity;
+    private String productImageUrl;
     @Builder.Default
     private BigDecimal unitPrice=BigDecimal.ZERO;
     @Builder.Default

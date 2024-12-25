@@ -10,7 +10,7 @@ public class ProductDto {
     private String id;
     private String name;
     private String brand;
-    private String imageUrl;
+    private String image;
     private BigDecimal price;
     private int inventory;// number of product remaining in the stock
     private String description;

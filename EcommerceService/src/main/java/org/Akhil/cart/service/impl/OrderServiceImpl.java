@@ -22,6 +22,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -97,14 +98,18 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderDto convertToDto(Order order){
         OrderDto orderDto= converter.convertToDto(order,OrderDto.class);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a"); // US format (12-hour with AM/PM)
+        orderDto.setDateOfOrder(order.getOrderDate().format(formatter));
         orderDto.setStatus(OrderStatus.status(order.getOrderStatus()));
         orderDto.setOrderItems(orderItemRepo.findByOrderId(orderDto.getOrderId()).stream().map(this::convertToOrderDto).toList());
         return orderDto;
     }
     private OrderItemDto convertToOrderDto(OrderItem orderItem){
         OrderItemDto orderItemDto=converter.convertToDto(orderItem,OrderItemDto.class);
-        String productName=productRepo.getName(orderItem.getProductId()).orElseThrow(()->new ResourceNotFoundException("product not found"));
-        orderItemDto.setProductName(productName);
+        List<Object[]> obj=productRepo.getNameAndImage(orderItem.getProductId()).orElseThrow(()->new ResourceNotFoundException("product not found"));
+        Object[] productDetails = obj.getFirst();
+        orderItemDto.setProductName((String) productDetails[0]);
+        orderItemDto.setProductImageUrl((String) productDetails[1]);
         return orderItemDto;
     }
 

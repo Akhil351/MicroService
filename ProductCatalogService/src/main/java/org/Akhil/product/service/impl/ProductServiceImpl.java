@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
                 .name(productDto.getName())
                 .brand(productDto.getBrand())
                 .price(productDto.getPrice())
-                .imageUrl(productDto.getImageUrl())
+                .image(productDto.getImage())
                 .inventory(productDto.getInventory())
                 .description(productDto.getDescription())
                 .categoryId(categoryId)
@@ -90,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
         if(!ObjectUtils.isEmpty(productDto.getBrand())) existingProduct.setBrand(productDto.getBrand());
         if(!ObjectUtils.isEmpty(productDto.getPrice())) existingProduct.setPrice(productDto.getPrice());
         if(!ObjectUtils.isEmpty(productDto.getDescription())) existingProduct.setDescription(productDto.getDescription());
-        if(!ObjectUtils.isEmpty(productDto.getImageUrl())) existingProduct.setImageUrl(productDto.getImageUrl());
+        if(!ObjectUtils.isEmpty(productDto.getImage())) existingProduct.setImage(productDto.getImage());
         if(productDto.getInventory()!=0) existingProduct.setInventory(productDto.getInventory());
         if(!ObjectUtils.isEmpty(productDto.getCategory()))  {
         Category category=this.getCategory(productDto.getCategory());

@@ -18,6 +18,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -76,8 +77,10 @@ public class CartServiceImpl implements CartService {
     }
     private CartItemDto convertToCartItemDto(CartItem cartItem){
         CartItemDto cartItemDto= converter.convertToDto(cartItem, CartItemDto.class);
-        String productName=productRepo.getName(cartItem.getProductId()).orElseThrow(()->new ResourceNotFoundException("product not found"));
-        cartItemDto.setProductName(productName);
+        List<Object[]> obj=productRepo.getNameAndImage(cartItem.getProductId()).orElseThrow(()->new ResourceNotFoundException("product not found"));
+        Object[] productDetails = obj.getFirst();
+        cartItemDto.setProductName((String) productDetails[0]);
+        cartItemDto.setProductImageUrl((String) productDetails[1]);
         return cartItemDto;
     }
 
